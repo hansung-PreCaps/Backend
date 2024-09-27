@@ -1,5 +1,6 @@
 package com.pictalk.global;
 
+import com.pictalk.global.payload.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -17,8 +18,8 @@ public class HealthController {
             @ApiResponse(responseCode = "500", description = "서버 상태가 비정상입니다.")
     })
     @GetMapping("/health")
-    public String health() {
-        return "OK";
+    public CommonResponse<String> health() {
+        return CommonResponse.onSuccess("성공 응답");
     }
 
 }

@@ -45,7 +45,8 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-                                                                  HttpHeaders headers, HttpStatusCode status,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatusCode status,
                                                                   WebRequest request) {
         Map<String, String> errors = new LinkedHashMap<>();
 
@@ -80,7 +81,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternalOthers(e, ErrorStatus.INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY,
                 ErrorStatus.INTERNAL_SERVER_ERROR.getHttpStatus(), request, e.getMessage());
     }
-
 
     private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, ErrorStatus errorStatus,
                                                                      HttpHeaders headers, WebRequest request) {

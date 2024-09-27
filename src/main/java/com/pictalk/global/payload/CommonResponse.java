@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.pictalk.global.payload.status.BaseStatus;
 import com.pictalk.global.payload.status.SuccessStatus;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,13 +14,11 @@ import lombok.Getter;
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
 public class CommonResponse<T> {
 
+    @Getter(AccessLevel.NONE)
     @JsonProperty("isSuccess")
     private final boolean isSuccess;
-
     private final String code;
-
     private final String message;
-
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final T result;
 
