@@ -93,7 +93,8 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternalArgs(Exception e, HttpHeaders headers,
                                                                ErrorStatus errorStatus,
-                                                               WebRequest request, Map<String, String> errorArgs) {
+                                                               WebRequest request,
+                                                               Map<String, String> errorArgs) {
         CommonResponse<Object> body = CommonResponse.onFailure(errorStatus.getCode(),
                 errorStatus.getMessage(),
                 errorArgs);
@@ -101,8 +102,10 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return super.handleExceptionInternal(e, body, headers, errorStatus.getHttpStatus(), request);
     }
 
-    private ResponseEntity<Object> handleExceptionInternalGeneral(Exception e, ReasonDto reason,
-                                                                  HttpHeaders headers, HttpServletRequest request) {
+    private ResponseEntity<Object> handleExceptionInternalGeneral(Exception e,
+                                                                  ReasonDto reason,
+                                                                  HttpHeaders headers,
+                                                                  HttpServletRequest request) {
         CommonResponse<Object> body = CommonResponse.onFailure(reason.getCode(),
                 reason.getMessage(),
                 null);
