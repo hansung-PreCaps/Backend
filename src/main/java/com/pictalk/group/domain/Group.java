@@ -1,6 +1,6 @@
-package com.pictalk.global.domain.user;
+package com.pictalk.group.domain;
 
-import com.pictalk.global.domain.message.Sender;
+import com.pictalk.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,24 +10,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "groups")
 @Getter
 @Setter
-public class User {
+public class Group {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long userId;
+    @Column(name = "groupId", nullable = false)
+    private Long id;
 
-    @OneToMany(mappedBy = "user")
-    private List<Sender> senders = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(nullable = false)
-    private String username;
+    @OneToMany(mappedBy = "group")
+    private List<GroupReceiver> groupReceivers = new ArrayList<>();
 
-    @Column(nullable = false)
-    private String password;
+    private String name;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -37,6 +37,5 @@ public class User {
         createdAt = LocalDateTime.now();
     }
 
-    private LocalDateTime updatedAt;
     private boolean isDeleted = false;
 }

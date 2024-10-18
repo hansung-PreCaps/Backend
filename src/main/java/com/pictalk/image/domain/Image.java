@@ -1,44 +1,34 @@
-package com.pictalk.global.domain.message;
+package com.pictalk.image.domain;
 
-import com.pictalk.global.domain.group.GroupReceiver;
+import com.pictalk.message.domain.Message;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "receiver")
+@Table(name = "image")
 @Getter
 @Setter
-public class Receiver {
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long receiverId;
+    private Long imageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "message_id", nullable = false)
     private Message message;
 
-    @OneToMany(mappedBy = "receiver")
-    private List<GroupReceiver> groupReceivers = new ArrayList<>();
+    private String url;
 
-    private String nickname;
-
-    @Column(nullable = false)
-    private String phoneNumber;
-
-    @Column(nullable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
-
-    private boolean isDeleted;
 }

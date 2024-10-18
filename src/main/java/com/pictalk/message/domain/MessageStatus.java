@@ -1,4 +1,4 @@
-package com.pictalk.global.domain.message;
+package com.pictalk.message.domain;
 
 public enum MessageStatus {
     SCHEDULED, // 예약됨

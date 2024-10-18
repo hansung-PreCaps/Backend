@@ -1,6 +1,6 @@
-package com.pictalk.global.domain.group;
+package com.pictalk.message.domain;
 
-import com.pictalk.global.domain.user.User;
+import com.pictalk.group.domain.GroupReceiver;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,24 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "receiver")
 @Getter
 @Setter
-public class Group {
+public class Receiver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "groupId", nullable = false)
-    private Long id;
+    @Column(nullable = false)
+    private Long receiverId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "message_id", nullable = false)
+    private Message message;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "receiver")
     private List<GroupReceiver> groupReceivers = new ArrayList<>();
 
-    private String name;
+    private String nickname;
+
+    @Column(nullable = false)
+    private String phoneNumber;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -37,5 +40,5 @@ public class Group {
         createdAt = LocalDateTime.now();
     }
 
-    private boolean isDeleted = false;
+    private boolean isDeleted;
 }

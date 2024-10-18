@@ -1,6 +1,6 @@
-package com.pictalk.global.domain.message;
+package com.pictalk.message.domain;
 
-import com.pictalk.global.domain.user.User;
+import com.pictalk.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
