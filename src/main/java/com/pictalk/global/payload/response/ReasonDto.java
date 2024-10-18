@@ -1,4 +1,4 @@
-package com.pictalk.global.payload;
+package com.pictalk.global.payload.response;
 
 import lombok.Builder;
 import lombok.Getter;

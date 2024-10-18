@@ -1,5 +1,6 @@
-package com.pictalk.global.domain;
+package com.pictalk.global.domain.user;
 
+import com.pictalk.global.domain.message.Sender;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +16,12 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long userId;
+
+    @OneToMany(mappedBy = "user")
+    private List<Sender> senders = new ArrayList<>();
 
     @Column(nullable = false)
     private String username;
@@ -28,11 +32,11 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
     private LocalDateTime updatedAt;
-
-    @Column(nullable = false)
-    private Boolean isDeleted = false;
-
-    @OneToMany(mappedBy = "user")
-    private List<Sender> senders = new ArrayList<>();
+    private boolean isDeleted = false;
 }

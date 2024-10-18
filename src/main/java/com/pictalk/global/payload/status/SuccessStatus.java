@@ -1,6 +1,6 @@
 package com.pictalk.global.payload.status;
 
-import com.pictalk.global.payload.ReasonDto;
+import com.pictalk.global.payload.response.ReasonDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
