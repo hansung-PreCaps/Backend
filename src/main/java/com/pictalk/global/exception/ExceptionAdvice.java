@@ -1,7 +1,7 @@
 package com.pictalk.global.exception;
 
-import com.pictalk.global.payload.CommonResponse;
-import com.pictalk.global.payload.ReasonDto;
+import com.pictalk.global.payload.response.CommonResponse;
+import com.pictalk.global.payload.response.ReasonDto;
 import com.pictalk.global.payload.status.ErrorStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;

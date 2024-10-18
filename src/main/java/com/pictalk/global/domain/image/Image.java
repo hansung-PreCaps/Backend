@@ -1,5 +1,6 @@
-package com.pictalk.global.domain;
+package com.pictalk.global.domain.image;
 
+import com.pictalk.global.domain.message.Message;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class Image {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long imageId;
 
@@ -22,5 +23,12 @@ public class Image {
     private Message message;
 
     private String url;
+
+    @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }

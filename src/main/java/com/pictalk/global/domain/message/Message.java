@@ -1,5 +1,6 @@
-package com.pictalk.global.domain;
+package com.pictalk.global.domain.message;
 
+import com.pictalk.global.domain.image.Image;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.util.List;
 public class Message {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long messageId;
 
@@ -23,21 +24,26 @@ public class Message {
     @JoinColumn(name = "sender_id", nullable = false)
     private Sender sender;
 
-    private MessageStatus status; // [SCHEDULED, SENT, CANCELLED]
-    private String content;
-    private LocalDateTime sentAt;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    @Column(nullable = false)
-    private Boolean isDeleted = false;
-
     @OneToMany(mappedBy = "message")
     private List<Receiver> receivers = new ArrayList<>();
 
     @OneToMany(mappedBy = "message")
     private List<Image> images = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private MessageStatus status; // [SCHEDULED, SENT, CANCELLED]
+
+    private String content;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    private LocalDateTime updatedAt;
+    private LocalDateTime sentAt;
+    private boolean isDeleted = false;
 }

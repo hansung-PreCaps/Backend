@@ -1,5 +1,6 @@
-package com.pictalk.global.domain;
+package com.pictalk.global.domain.group;
 
+import com.pictalk.global.domain.message.Receiver;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import lombok.Setter;
 public class GroupReceiver {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long groupReceiverId;
 
