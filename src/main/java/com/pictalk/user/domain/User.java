@@ -17,8 +17,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long userId;
+    @Column(name = "user_id", nullable = false)
+    private Long id;
 
     @OneToMany(mappedBy = "user")
     private List<Sender> senders = new ArrayList<>();
