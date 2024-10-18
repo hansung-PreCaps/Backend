@@ -1,6 +1,6 @@
 package com.pictalk.global;
 
-import com.pictalk.global.payload.CommonResponse;
+import com.pictalk.global.payload.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
