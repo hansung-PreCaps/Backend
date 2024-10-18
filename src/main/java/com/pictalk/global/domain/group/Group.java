@@ -38,22 +38,4 @@ public class Group {
     }
 
     private boolean isDeleted = false;
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    // groupReceivers에 요소를 추가하는 메서드 추가
-    public void addGroupReceiver(GroupReceiver groupReceiver) {
-        this.groupReceivers.add(groupReceiver);
-        groupReceiver.setGroup(this); // 양방향 연관관계 설정
-    }
 }
