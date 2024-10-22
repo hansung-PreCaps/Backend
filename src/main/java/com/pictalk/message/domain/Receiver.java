@@ -2,8 +2,10 @@ package com.pictalk.message.domain;
 
 import com.pictalk.group.domain.GroupReceiver;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +14,9 @@ import java.util.List;
 @Entity
 @Table(name = "receiver")
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Receiver {
 
     @Id
@@ -25,6 +29,7 @@ public class Receiver {
     private Message message;
 
     @OneToMany(mappedBy = "receiver")
+    @Builder.Default
     private List<GroupReceiver> groupReceivers = new ArrayList<>();
 
     private String nickname;
@@ -35,10 +40,17 @@ public class Receiver {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Builder.Default
+    private boolean isDeleted = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
 
-    private boolean isDeleted;
+    public Receiver(Message message, String nickname, String phoneNumber) {
+        this.message = message;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+    }
 }

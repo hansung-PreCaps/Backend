@@ -2,13 +2,17 @@ package com.pictalk.group.domain;
 
 import com.pictalk.message.domain.Receiver;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "group_receiver")
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class GroupReceiver {
 
     @Id
@@ -23,4 +27,9 @@ public class GroupReceiver {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id", nullable = false)
     private Receiver receiver;
+
+    public GroupReceiver(Group group, Receiver receiver) {
+        this.group = group;
+        this.receiver = receiver;
+    }
 }

@@ -2,15 +2,19 @@ package com.pictalk.image.domain;
 
 import com.pictalk.message.domain.Message;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "image")
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Image {
 
     @Id
@@ -30,5 +34,10 @@ public class Image {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+    }
+
+    public Image(Message message, String url) {
+        this.message = message;
+        this.url = url;
     }
 }

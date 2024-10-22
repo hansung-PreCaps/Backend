@@ -2,8 +2,10 @@ package com.pictalk.message.domain;
 
 import com.pictalk.image.domain.Image;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +14,9 @@ import java.util.List;
 @Entity
 @Table(name = "message")
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Message {
 
     @Id
@@ -25,9 +29,11 @@ public class Message {
     private Sender sender;
 
     @OneToMany(mappedBy = "message")
+    @Builder.Default
     private List<Receiver> receivers = new ArrayList<>();
 
     @OneToMany(mappedBy = "message")
+    @Builder.Default
     private List<Image> images = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -38,12 +44,20 @@ public class Message {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+    private LocalDateTime sentAt;
+
+    @Builder.Default
+    private boolean isDeleted = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
 
-    private LocalDateTime updatedAt;
-    private LocalDateTime sentAt;
-    private boolean isDeleted = false;
+    public Message(Sender sender, MessageStatus status, String content) {
+        this.sender = sender;
+        this.status = status;
+        this.content = content;
+    }
 }

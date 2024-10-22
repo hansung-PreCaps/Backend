@@ -2,8 +2,10 @@ package com.pictalk.user.domain;
 
 import com.pictalk.message.domain.Sender;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +14,9 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -21,6 +25,7 @@ public class User {
     private Long id;
 
     @OneToMany(mappedBy = "user")
+    @Builder.Default
     private List<Sender> senders = new ArrayList<>();
 
     @Column(nullable = false)
@@ -32,11 +37,18 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
+    @Builder.Default
+    private boolean isDeleted = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
 
-    private LocalDateTime updatedAt;
-    private boolean isDeleted = false;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

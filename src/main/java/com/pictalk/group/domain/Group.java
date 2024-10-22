@@ -2,8 +2,7 @@ package com.pictalk.group.domain;
 
 import com.pictalk.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +11,9 @@ import java.util.List;
 @Entity
 @Table(name = "groups")
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Group {
 
     @Id
@@ -25,6 +26,7 @@ public class Group {
     private User user;
 
     @OneToMany(mappedBy = "group")
+    @Builder.Default
     private List<GroupReceiver> groupReceivers = new ArrayList<>();
 
     private String name;
@@ -32,10 +34,16 @@ public class Group {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Builder.Default
+    private boolean isDeleted = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
 
-    private boolean isDeleted = false;
+    public Group(User user, String name) {
+        this.user = user;
+        this.name = name;
+    }
 }
