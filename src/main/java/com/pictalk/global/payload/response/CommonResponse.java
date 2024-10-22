@@ -1,4 +1,4 @@
-package com.pictalk.global.payload;
+package com.pictalk.global.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
