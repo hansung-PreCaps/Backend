@@ -14,12 +14,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder
+@Table(name = "`user`")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false)
     private Long id;
 
     @NotEmpty(message = "Username is required")
