@@ -1,6 +1,6 @@
 package com.pictalk.global.exception;
 
-import com.pictalk.global.payload.ReasonDto;
+import com.pictalk.global.payload.response.ReasonDto;
 import com.pictalk.global.payload.status.BaseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
