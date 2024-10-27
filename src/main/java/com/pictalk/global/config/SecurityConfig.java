@@ -62,7 +62,14 @@ public class SecurityConfig {
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .httpBasic(HttpBasicConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/**").permitAll() // /auth/** 엔드포인트는 인증 없이 접근 가능
+                        .requestMatchers(
+                                "/users/signup",
+                                "/users/signin",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger/**"
+                        ).permitAll() // /auth/** 엔드포인트는 인증 없이 접근 가능
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 )
 //                .authorizeHttpRequests(requests ->
