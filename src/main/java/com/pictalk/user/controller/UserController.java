@@ -1,6 +1,6 @@
 package com.pictalk.user.controller;
 
-import com.pictalk.global.payload.CommonResponse;
+import com.pictalk.global.payload.response.CommonResponse;
 import com.pictalk.user.domain.dto.UserRequestDto;
 import com.pictalk.user.domain.dto.UserRequestDto.LogoutRequest;
 import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
