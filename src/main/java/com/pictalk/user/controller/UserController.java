@@ -1,10 +1,12 @@
-package com.pictalk.user;
+package com.pictalk.user.controller;
 
 import com.pictalk.global.payload.CommonResponse;
-import com.pictalk.user.UserRequestDto.LogoutRequest;
-import com.pictalk.user.UserResponseDto.LoginResponse;
-import com.pictalk.user.UserResponseDto.UserResponse;
+import com.pictalk.user.domain.dto.UserRequestDto;
+import com.pictalk.user.domain.dto.UserRequestDto.LogoutRequest;
+import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
+import com.pictalk.user.domain.dto.UserResponseDto.UserResponse;
 
+import com.pictalk.user.service.UserService;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
-package com.pictalk.user;
+package com.pictalk.user.repository;
 
+import com.pictalk.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;

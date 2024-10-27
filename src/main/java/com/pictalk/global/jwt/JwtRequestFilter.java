@@ -2,8 +2,8 @@ package com.pictalk.global.jwt;
 
 import com.pictalk.global.exception.GeneralException;
 import com.pictalk.global.payload.status.ErrorStatus;
-import com.pictalk.user.User;
-import com.pictalk.user.UserRepository;
+import com.pictalk.user.domain.User;
+import com.pictalk.user.repository.UserRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

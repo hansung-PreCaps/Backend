@@ -1,54 +1,41 @@
 package com.pictalk.user.domain;
 
-import com.pictalk.message.domain.Sender;
+import com.pictalk.global.common.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "user")
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class User {
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false)
     private Long id;
 
-    @OneToMany(mappedBy = "user")
-    @Builder.Default
-    private List<Sender> senders = new ArrayList<>();
-
-    @Column(nullable = false)
+    @NotEmpty(message = "Username is required")
     private String username;
 
-    @Column(nullable = false)
+    @NotEmpty(message = "Password is required")
     private String password;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+    @Email
+    @NotEmpty(message = "Email is required")
+    private String email;
 
-    private LocalDateTime updatedAt;
+    @Column(name = "refresh_token")
+    private String refreshToken;
 
-    @Builder.Default
-    private boolean isDeleted = false;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public void updateRefreshToken(String updateRefreshToken) {
+        this.refreshToken = updateRefreshToken;
     }
 }

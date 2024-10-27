@@ -3,7 +3,7 @@ package com.pictalk.global.config;
 
 import com.pictalk.global.jwt.JwtRequestFilter;
 import com.pictalk.global.jwt.JwtService;
-import com.pictalk.user.UserRepository;
+import com.pictalk.user.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

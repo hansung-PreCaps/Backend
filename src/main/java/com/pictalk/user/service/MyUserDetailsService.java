@@ -1,7 +1,8 @@
-package com.pictalk.user;
+package com.pictalk.user.service;
 
+import com.pictalk.user.repository.UserRepository;
+import com.pictalk.user.domain.User;
 import java.util.ArrayList;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,6 +1,6 @@
 package com.pictalk.global.jwt;
 
-import com.pictalk.user.UserRepository;
+import com.pictalk.user.repository.UserRepository;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

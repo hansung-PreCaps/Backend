@@ -1,6 +1,5 @@
-package com.pictalk.user;
+package com.pictalk.user.domain.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,17 +1,17 @@
-package com.pictalk.user;
+package com.pictalk.user.service;
 
 import com.pictalk.global.exception.GeneralException;
 import com.pictalk.global.jwt.JwtRequestFilter;
 import com.pictalk.global.jwt.JwtService;
-import com.pictalk.global.jwt.JwtToken;
 import com.pictalk.global.payload.status.ErrorStatus;
-import com.pictalk.user.UserRequestDto.*;
-import com.pictalk.user.UserResponseDto.LoginResponse;
-import com.pictalk.user.UserResponseDto.UserResponse;
+import com.pictalk.user.converter.UserConverter;
+import com.pictalk.user.repository.UserRepository;
+import com.pictalk.user.domain.dto.UserRequestDto.*;
+import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
+import com.pictalk.user.domain.dto.UserResponseDto.UserResponse;
+import com.pictalk.user.domain.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
