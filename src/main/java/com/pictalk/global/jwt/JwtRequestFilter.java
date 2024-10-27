@@ -63,15 +63,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     public void saveAuthentication(User user) {
-        UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getPassword())
                 .build();
 
-
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(userDetailsUser, null,
-                        authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, authoritiesMapper.mapAuthorities(userDetails.getAuthorities()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

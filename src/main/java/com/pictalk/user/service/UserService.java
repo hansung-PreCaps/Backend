@@ -10,6 +10,7 @@ import com.pictalk.user.domain.dto.UserRequestDto.*;
 import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
 import com.pictalk.user.domain.dto.UserResponseDto.UserResponse;
 import com.pictalk.user.domain.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,7 +51,8 @@ public class UserService {
             throw new GeneralException(ErrorStatus.USER_PASSWORD_NOT_MATCH);
         }
 
-        String accessToken = jwtService.createAccessToken(user.getUsername());
+//        String accessToken = jwtService.createAccessToken(user.getUsername());
+        String accessToken = jwtService.createAccessToken(user.getEmail());
         String refreshToken = jwtService.createRefreshToken();
 
         // 리프레시 토큰 저장
@@ -61,14 +63,22 @@ public class UserService {
     }
 
     // 로그아웃
-    public void logout(String username) {
-        User user = userRepository.findByUsername(username)
+    public void logout(HttpServletRequest request) {
+        // Access Token 추출 및 존재 여부 확인
+        String accessToken = jwtService.extractAccessToken(request)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_ACCESS_TOKEN_NOT_VALID));
+
+        // Access Token에서 이메일 추출 후 사용자 조회
+        String email = jwtService.extractEmail(accessToken)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_ACCESS_TOKEN_NOT_VALID));
+
+        User user = (User) userRepository.findByEmail(email)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
+        // 리프레시 토큰 무효화
         user.updateRefreshToken(null);
         userRepository.save(user);
     }
-
     // 리프레시 토큰을 이용한 액세스 토큰 재발급
     public LoginResponse refreshAccessToken(String refreshToken) {
         if (!jwtService.isTokenValid(refreshToken)) {
@@ -86,7 +96,7 @@ public class UserService {
         }
 
         // 새로운 액세스 토큰 생성
-        String newAccessToken = jwtService.createAccessToken(user.getUsername());
+        String newAccessToken = jwtService.createAccessToken(user.getEmail());
 
         // 새로운 리프레시 토큰도 생성하고 저장
         String newRefreshToken = jwtService.createRefreshToken();

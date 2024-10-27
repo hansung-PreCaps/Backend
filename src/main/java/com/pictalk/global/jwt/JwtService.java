@@ -91,26 +91,25 @@ public class JwtService {
     }
 
     public Optional<String> extractEmail(String accessToken) {
-        try {
-            Claims claims = decodeAccessToken(accessToken);
-            if (claims != null) {
-                return Optional.of(claims.get(EMAIL_CLAIM, String.class));
-            }
-        } catch (Exception e) {
-            log.error("Error extracting email: {}", e.getMessage());
-        }
-        return Optional.empty();
+        return decodeAccessToken(accessToken)
+                .map(claims -> claims.get(EMAIL_CLAIM, String.class));
     }
 
-    private Claims decodeAccessToken(String accessToken) {
+
+    public Optional<Claims> decodeAccessToken(String accessToken) {
         try {
-            return Jwts.parserBuilder()
+            Claims claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(accessToken)
                     .getBody();
+            return Optional.of(claims);
         } catch (ExpiredJwtException e) {
-            return e.getClaims();
+            log.info("Token has expired.");
+            return Optional.of(e.getClaims()); // 만료된 토큰의 Claims 반환
+        } catch (Exception e) {
+            log.error("Token is invalid: {}", e.getMessage());
+            return Optional.empty(); // 유효하지 않은 경우 빈 값 반환
         }
     }
 }

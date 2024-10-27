@@ -7,6 +7,7 @@ import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
 import com.pictalk.user.domain.dto.UserResponseDto.UserResponse;
 
 import com.pictalk.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +39,10 @@ public class UserController {
     }
     // 로그아웃 엔드포인트
     @PostMapping("/logout")
-    public ResponseEntity<CommonResponse<String>> logout(@RequestBody LogoutRequest request) throws IOException {
-        userService.logout(request.getUsername());
-        CommonResponse<String> response = CommonResponse.onSuccess("User logged out successfully");
-        return ResponseEntity.status(204).body(response);
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        // Authorization 헤더에서 Access Token 추출 후 로그아웃 처리
+        userService.logout(request);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/refresh")
