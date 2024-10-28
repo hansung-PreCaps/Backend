@@ -6,7 +6,7 @@ permissions:
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened]
 
 jobs:
   test:
@@ -21,7 +21,7 @@ jobs:
           LANGUAGE: Korean # default: English
           OPENAI_API_ENDPOINT: https://api.openai.com/v1
           MODEL: "gpt-4o-mini" # https://platform.openai.com/docs/models
-          PROMPT: "code review please" # https://platform.openai.com/docs/api-reference/chat/create#chat/create-prompt
+          PROMPT: "Please review the code only for parts that are incorrect, need modification, or could be refactored. You should also suggest how the code can be improved." # https://platform.openai.com/docs/api-reference/chat/create#chat/create-prompt
           top_p: 1 # https://platform.openai.com/docs/api-reference/chat/create#chat/create-top_p
           temperature: 1 # https://platform.openai.com/docs/api-reference/chat/create#chat/create-temperature
           max_tokens: 10000
