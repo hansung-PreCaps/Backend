@@ -95,9 +95,7 @@ public class UserService {
         String newAccessToken = jwtService.createAccessToken(user.getEmail());
 
         // 새로운 리프레시 토큰도 생성하고 저장
-        String newRefreshToken = jwtService.createRefreshToken();
-        user.updateRefreshToken(newRefreshToken);
-        userRepository.save(user);
+        jwtRequestFilter.reIssueRefreshToken(user);
 
         // 클라이언트에는 새 액세스 토큰만 반환
         return LoginResponse.builder()

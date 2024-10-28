@@ -36,7 +36,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         checkAccessTokenAndAuthentication(request, response, filterChain);
     }
 
-    private String reIssueRefreshToken(User user) {
+    public String reIssueRefreshToken(User user) {
         String reIssuedRefreshToken = jwtService.createRefreshToken();
         user.updateRefreshToken(reIssuedRefreshToken);
         userRepository.saveAndFlush(user);
