@@ -41,8 +41,4 @@ public class SwaggerConfig {
                 .title("Pic&Talk API 명세서")
                 .version("1.0");
     }
-//    public OpenAPI customOpenAPI() {
-//        return new OpenAPI()
-//                .addServersItem(new Server().url("/"));
-//    }
 }
