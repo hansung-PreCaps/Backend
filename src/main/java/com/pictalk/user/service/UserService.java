@@ -27,9 +27,6 @@ public class UserService {
     // 회원가입
     @Transactional
     public UserResponse registerUser(CreateUser createUser) {
-//        if (userRepository.findByUsername(createUser.getUsername()).isPresent()) {
-//            throw new GeneralException(ErrorStatus.USER_USERNAME_ALREADY_EXISTS);
-//        }
         if (userRepository.existsByUsername(createUser.getUsername())) {
             throw new GeneralException(ErrorStatus.USER_USERNAME_ALREADY_EXISTS);
         }
@@ -51,7 +48,6 @@ public class UserService {
             throw new GeneralException(ErrorStatus.USER_PASSWORD_NOT_MATCH);
         }
 
-//        String accessToken = jwtService.createAccessToken(user.getUsername());
         String accessToken = jwtService.createAccessToken(user.getEmail());
         String refreshToken = jwtService.createRefreshToken();
 
@@ -82,17 +78,17 @@ public class UserService {
     // 리프레시 토큰을 이용한 액세스 토큰 재발급
     public LoginResponse refreshAccessToken(String refreshToken) {
         if (!jwtService.isTokenValid(refreshToken)) {
-            throw new IllegalArgumentException("Invalid refresh token");
+            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
         }
 
         String username = jwtService.extractEmail(refreshToken)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid refresh token"));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID));
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         if (!refreshToken.equals(user.getRefreshToken())) {
-            throw new IllegalArgumentException("Refresh token does not match");
+           throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
         }
 
         // 새로운 액세스 토큰 생성
