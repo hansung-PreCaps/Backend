@@ -1,5 +1,7 @@
 package com.pictalk.user.controller;
 
+import com.pictalk.global.exception.GeneralException;
+import com.pictalk.global.payload.status.ErrorStatus;
 import com.pictalk.global.payload.response.CommonResponse;
 import com.pictalk.user.domain.dto.UserRequestDto;
 import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
@@ -8,7 +10,6 @@ import com.pictalk.user.domain.dto.UserResponseDto.UserResponse;
 import com.pictalk.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,16 +25,15 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<CommonResponse<UserResponse>> signup(@Valid @RequestBody UserRequestDto.CreateUser createUser) throws IOException {
+    public CommonResponse<UserResponse> signup(@Valid @RequestBody UserRequestDto.CreateUser createUser) {
         UserResponse userResponse = userService.registerUser(createUser);
-        CommonResponse<UserResponse> response = CommonResponse.onSuccess(userResponse);
-        return ResponseEntity.status(201).body(response);
+        return CommonResponse.onSuccess(userResponse);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<CommonResponse<String>> login(@Valid @RequestBody UserRequestDto.LoginUser loginUser) throws IOException{
-        String accessToken =  userService.login(loginUser);
-        return ResponseEntity.status(200).body(CommonResponse.onSuccess(accessToken));
+    public CommonResponse<LoginResponse> login(@Valid @RequestBody UserRequestDto.LoginUser loginUser) {
+        LoginResponse loginResponse =  userService.login(loginUser);
+        return CommonResponse.onSuccess(loginResponse);
 
     }
     // 로그아웃 엔드포인트
@@ -45,13 +45,12 @@ public class UserController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<CommonResponse<LoginResponse>> refreshAccessToken(@RequestHeader("Authorization") String refreshToken) throws IOException {
+    public CommonResponse<String> refreshAccessToken(@RequestHeader("Authorization") String refreshToken) {
         if (!refreshToken.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Invalid token format");
+            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
         }
         String token = refreshToken.substring(7);
-        LoginResponse loginResponse = userService.refreshAccessToken(token);
-        CommonResponse<LoginResponse> response = CommonResponse.onSuccess(loginResponse);
-        return ResponseEntity.status(200).body(response);
+        String newAccessToken = userService.refreshAccessToken(token);
+        return CommonResponse.onSuccess(newAccessToken);
     }
 }
