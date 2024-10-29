@@ -5,9 +5,9 @@ import com.pictalk.global.jwt.JwtRequestFilter;
 import com.pictalk.global.jwt.JwtService;
 import com.pictalk.global.payload.status.ErrorStatus;
 import com.pictalk.user.converter.UserConverter;
+import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
 import com.pictalk.user.repository.UserRepository;
 import com.pictalk.user.domain.dto.UserRequestDto.*;
-import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
 import com.pictalk.user.domain.dto.UserResponseDto.UserResponse;
 import com.pictalk.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +40,8 @@ public class UserService {
     }
 
     // 로그인
-    public String login(LoginUser loginUser) {
+    @Transactional
+    public LoginResponse login(LoginUser loginUser) {
         User user = userRepository.findByUsername(loginUser.getUsername())
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
@@ -53,12 +54,11 @@ public class UserService {
 
         // 리프레시 토큰 저장
         user.updateRefreshToken(refreshToken);
-        userRepository.save(user);
-
-        return accessToken;
+        return UserConverter.toLoginResponse(accessToken, refreshToken);
     }
 
     // 로그아웃
+    @Transactional
     public void logout(HttpServletRequest request) {
         // Access Token 추출 및 존재 여부 확인
         String accessToken = jwtService.extractAccessToken(request)
@@ -68,23 +68,22 @@ public class UserService {
         String email = jwtService.extractEmail(accessToken)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_ACCESS_TOKEN_NOT_VALID));
 
-        User user = (User) userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         // 리프레시 토큰 무효화
         user.updateRefreshToken(null);
-        userRepository.save(user);
     }
     // 리프레시 토큰을 이용한 액세스 토큰 재발급
-    public LoginResponse refreshAccessToken(String refreshToken) {
+    public String refreshAccessToken(String refreshToken) {
         if (!jwtService.isTokenValid(refreshToken)) {
             throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
         }
 
-        String username = jwtService.extractEmail(refreshToken)
+        String email = jwtService.extractEmail(refreshToken)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID));
 
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         if (!refreshToken.equals(user.getRefreshToken())) {
@@ -94,12 +93,31 @@ public class UserService {
         // 새로운 액세스 토큰 생성
         String newAccessToken = jwtService.createAccessToken(user.getEmail());
 
-        // 새로운 리프레시 토큰도 생성하고 저장
-        jwtRequestFilter.reIssueRefreshToken(user);
-
         // 클라이언트에는 새 액세스 토큰만 반환
-        return LoginResponse.builder()
-                .accessToken(newAccessToken)
-                .build();
+        return newAccessToken;
+    }
+
+    public LoginResponse refreshAllToken(String refreshToken) {
+        if (!jwtService.isTokenValid(refreshToken)) {
+            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
+        }
+
+        String email = jwtService.extractEmail(refreshToken)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID));
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        if (!refreshToken.equals(user.getRefreshToken())) {
+            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
+        }
+
+        // 새로운 액세스 토큰 생성
+        String newAccessToken = jwtService.createAccessToken(user.getEmail());
+
+        // 새로운 리프레시 토큰 생성
+        String newRefreshToken = jwtService.reIssueRefreshToken(user);
+        // 클라이언트에는 새 액세스 토큰만 반환
+        return UserConverter.toLoginResponse(newAccessToken, newRefreshToken);
     }
 }

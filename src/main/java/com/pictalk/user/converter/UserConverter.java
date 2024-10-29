@@ -23,4 +23,11 @@ public class UserConverter {
                 .build();
     }
 
+    public static UserResponseDto.LoginResponse toLoginResponse(String accessToken, String refreshToken) {
+        return UserResponseDto.LoginResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
 }

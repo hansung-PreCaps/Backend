@@ -16,5 +16,6 @@ public class UserResponseDto {
     @Builder
     public static class LoginResponse {
         private String accessToken;
+        private String refreshToken;
     }
 }
