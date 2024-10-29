@@ -16,6 +16,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
+  config:
+    import: "optional:file:backend-secret.env[.properties]"
 
 jwt:
   access:
