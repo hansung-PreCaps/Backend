@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/picTalk?serverTimezone=UTC&characterEncoding=UTF-8
-    username: root
-    password: root
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_ROOT_PASSWORD}
 
   jpa:
     hibernate:
@@ -12,6 +12,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  config:
+    import: "optional:file:.env[.properties]"
 
 springdoc:
   swagger-ui:
@@ -19,3 +23,12 @@ springdoc:
   cache:
     disabled: true
   use-fqn: true
+
+jwt:
+  access:
+    expiration: 48000000
+    header: Authorization
+  refresh:
+    expiration: 86400000
+    header: Refresh
+  secret: ${JWT_SECURITY_KEY}
