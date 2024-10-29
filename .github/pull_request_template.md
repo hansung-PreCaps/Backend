@@ -1,41 +1,5 @@
-<!--
-     For Work In Progress Pull Requests, please use the Draft PR feature,
-     see https://github.blog/2019-02-14-introducing-draft-pull-requests/ for further details.
-
-     For a timely review/response, please avoid force-pushing additional
-     commits if your PR already received reviews or comments.
-
-     Before submitting a Pull Request, please ensure you've done the following:
-     - 📖 Read the Forem Contributing Guide: https://developers.forem.com/contributing-guide/forem#create-a-pull-request
-     - 📖 Read the Forem Code of Conduct: https://github.com/forem/forem/blob/main/CODE_OF_CONDUCT.md
-     - 👷‍♀️ Create small PRs. In most cases this will be possible.
-     - ✅ Provide tests for your changes.
-     - 📝 Use descriptive commit messages.
-     - 📗 Update any related documentation and include any relevant screenshots.
-
-     NOTE: Pull Requests from forked repositories will need to be reviewed by
-     a Forem Team member before any CI builds will run. Once your PR is approved
-     with a `/ci` reply to the PR, it will be allowed to run subsequent builds without
-     manual approval.
--->
-
-## PR 타입(하나 이상의 PR 타입을 선택해주세요)
-
-- [ ] 🚀 Feature
-- [ ] 🧹 Refactor
-- [ ] 🛠️ Bug Fix
-- [ ] 🧭 chore
-- [ ] 🎨 design
-- [ ] 🤖 perf
-- [ ] 📁 test
-- [ ] 📝 Documentation Update
-
-## 반영 브랜치
-ex) feat/login -> dev
-
 ## 변경 사항
 ex) 로그인 시, 구글 소셜 로그인 기능을 추가했습니다.
-
 
 ## 테스트 실행
 
@@ -45,3 +9,14 @@ ex) 로그인 시, 구글 소셜 로그인 기능을 추가했습니다.
 
 ### 테스트 결과
 ex) 베이스 브랜치에 포함되기 위한 코드는 모두 정상적으로 동작해야 합니다. 결과물에 대한 스크린샷, GIF, 혹은 라이브 데모가 가능하도록 샘플API를 첨부할 수도 있습니다.
+
+## +α Checklist
+- [ ] 자바 코드 컨벤션을 지키면서 프로그래밍했는가?
+- [ ] 한 메서드에 오직 한 단계의 들여쓰기(indent)만 허용했는가?
+- [ ] else 예약어를 쓰지 않았는가?
+- [ ] 3개 이상의 인스턴스 변수를 가진 클래스를 구현하지 않았는가? (가능하면 인스턴스 변수의 수를 줄이기 위해 노력한다.)
+- [ ] setter 없이 구현했는가?
+- [ ] 메소드의 인자 수를 제한했는가? (4개 이상의 인자는 허용하지 않는다. 3개도 가능하면 줄이기 위해 노력해 본다.)
+- [ ] 코드 한 줄에 점(.)을 하나만 허용했는가?
+- [ ] 메소드가 한가지 일만 담당하도록 구현했는가?
+- [ ] 클래스를 작게 유지하기 위해 노력했는가?
