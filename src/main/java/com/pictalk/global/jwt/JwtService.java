@@ -1,5 +1,6 @@
 package com.pictalk.global.jwt;
 
+import com.pictalk.user.domain.User;
 import com.pictalk.user.repository.UserRepository;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -67,6 +68,15 @@ public class JwtService {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+//  saveAndFlush 사용으로  @Transactional은 없어도 될 듯
+    public String reIssueRefreshToken(User user) {
+        String reIssuedRefreshToken = createRefreshToken();
+        user.updateRefreshToken(reIssuedRefreshToken);
+        userRepository.saveAndFlush(user);
+        return reIssuedRefreshToken;
+    }
+
 
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(refreshHeader))
