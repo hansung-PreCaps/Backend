@@ -32,3 +32,10 @@ jwt:
     expiration: 86400000
     header: Refresh
   secret: ${JWT_SECURITY_KEY}
+
+ppurio:
+  api:
+    url: ${PPURIO_API_URL}
+    key: ${PPURIO_API_KEY}
+    account: ${PPURIO_ACCOUNT}
+
