@@ -1,23 +1,22 @@
 package com.pictalk.message.domain;
 
 import com.pictalk.image.domain.Image;
+import com.pictalk.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.*;
+
 @Entity
 @Table(name = "message")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Message {
+public class Message extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +27,11 @@ public class Message {
     @JoinColumn(name = "sender_id", nullable = false)
     private Sender sender;
 
-    @OneToMany(mappedBy = "message")
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Receiver> receivers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "message")
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Image> images = new ArrayList<>();
 
@@ -41,23 +40,22 @@ public class Message {
 
     private String content;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
     private LocalDateTime sentAt;
 
     @Builder.Default
     private boolean isDeleted = false;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
+    public void addReceivers(List<Receiver> receivers) {
+        this.receivers.addAll(receivers);
     }
 
-    public Message(Sender sender, MessageStatus status, String content) {
-        this.sender = sender;
-        this.status = status;
-        this.content = content;
+    public void cancel() {
+        if (this.status == MessageStatus.SCHEDULED) {
+            this.status = MessageStatus.CANCELLED;
+        }
+    }
+
+    public void softDelete() {
+        this.isDeleted = true;
     }
 }

@@ -30,6 +30,9 @@ public enum ErrorStatus implements BaseStatus {
     USER_REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "USER_1012", "리프레시 토큰이 만료되었습니다."),
     USER_ACCESS_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "USER_1013", "액세스 토큰이 만료되었습니다."),
     USER_ACCESS_TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_1014", "액세스 토큰이 유효하지 않습니다."),
+
+    // Message Error
+    MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "MESSAGE_2001", "메시지를 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
