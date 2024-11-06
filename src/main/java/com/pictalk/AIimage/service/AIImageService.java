@@ -23,10 +23,9 @@ public class AIImageService {
         // Call the OpenAI API to generate the image
         String imageUrl = openAIImageClient.getImageUrlFromOpenAI(prompt);
 
-        ImageResponseDto.ImageResponse imageResponse = ImageResponseDto.ImageResponse.builder()
+        return ImageResponseDto.ImageResponse.builder()
                 .url(imageUrl)
                 .build();
 
-        return imageResponse;
     }
 }
