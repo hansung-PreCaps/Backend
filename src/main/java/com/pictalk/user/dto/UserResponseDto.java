@@ -1,4 +1,4 @@
-package com.pictalk.user.domain.dto;
+package com.pictalk.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;

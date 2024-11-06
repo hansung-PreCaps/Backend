@@ -1,4 +1,4 @@
-package com.pictalk.AIimage.domain.dto;
+package com.pictalk.AIimage.dto;
 
 import lombok.Builder;
 import lombok.Getter;
