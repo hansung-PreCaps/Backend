@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/ai_messages")
+@RequestMapping("/api/ai_messages")
 public class AIMessageController {
 
     private final AIMessageService aiMessageService;
