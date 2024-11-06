@@ -5,11 +5,11 @@ import com.pictalk.global.jwt.JwtRequestFilter;
 import com.pictalk.global.jwt.JwtService;
 import com.pictalk.global.payload.status.ErrorStatus;
 import com.pictalk.user.converter.UserConverter;
-import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
-import com.pictalk.user.repository.UserRepository;
-import com.pictalk.user.domain.dto.UserRequestDto.*;
-import com.pictalk.user.domain.dto.UserResponseDto.UserResponse;
 import com.pictalk.user.domain.User;
+import com.pictalk.user.dto.UserRequestDto;
+import com.pictalk.user.dto.UserResponseDto.LoginResponse;
+import com.pictalk.user.dto.UserResponseDto.UserResponse;
+import com.pictalk.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +26,11 @@ public class UserService {
 
     // 회원가입
     @Transactional
-    public UserResponse registerUser(CreateUser createUser) {
+    public UserResponse registerUser(UserRequestDto.CreateUser createUser) {
         if (userRepository.existsByUsername(createUser.getUsername())) {
             throw new GeneralException(ErrorStatus.USER_USERNAME_ALREADY_EXISTS);
         }
-        if(userRepository.existsByEmail(createUser.getEmail())) {
+        if (userRepository.existsByEmail(createUser.getEmail())) {
             throw new GeneralException(ErrorStatus.USER_EMAIL_ALREADY_EXISTS);
         }
 
@@ -41,7 +41,7 @@ public class UserService {
 
     // 로그인
     @Transactional
-    public LoginResponse login(LoginUser loginUser) {
+    public LoginResponse login(UserRequestDto.LoginUser loginUser) {
         User user = userRepository.findByUsername(loginUser.getUsername())
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
@@ -74,6 +74,7 @@ public class UserService {
         // 리프레시 토큰 무효화
         user.updateRefreshToken(null);
     }
+
     // 리프레시 토큰을 이용한 액세스 토큰 재발급
     public String refreshAccessToken(String refreshToken) {
         if (!jwtService.isTokenValid(refreshToken)) {
@@ -87,7 +88,7 @@ public class UserService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         if (!refreshToken.equals(user.getRefreshToken())) {
-           throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
+            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
         }
 
         // 새로운 액세스 토큰 생성

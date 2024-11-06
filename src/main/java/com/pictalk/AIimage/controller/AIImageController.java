@@ -1,8 +1,8 @@
 package com.pictalk.AIimage.controller;
 
 
-import com.pictalk.AIimage.domain.dto.ImageRequestDto;
-import com.pictalk.AIimage.domain.dto.ImageResponseDto;
+import com.pictalk.AIimage.dto.ImageRequestDto;
+import com.pictalk.AIimage.dto.ImageResponseDto;
 import com.pictalk.AIimage.service.AIImageService;
 import com.pictalk.global.payload.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;

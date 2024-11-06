@@ -1,8 +1,8 @@
 package com.pictalk.user.converter;
 
 import com.pictalk.user.domain.User;
-import com.pictalk.user.domain.dto.UserRequestDto;
-import com.pictalk.user.domain.dto.UserResponseDto;
+import com.pictalk.user.dto.UserRequestDto;
+import com.pictalk.user.dto.UserResponseDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserConverter {
