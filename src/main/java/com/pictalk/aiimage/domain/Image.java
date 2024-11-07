@@ -1,4 +1,4 @@
-package com.pictalk.AIimage.domain;
+package com.pictalk.aiimage.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

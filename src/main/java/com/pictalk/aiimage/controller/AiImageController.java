@@ -1,9 +1,9 @@
-package com.pictalk.AIimage.controller;
+package com.pictalk.aiimage.controller;
 
 
-import com.pictalk.AIimage.dto.ImageRequestDto;
-import com.pictalk.AIimage.dto.ImageResponseDto;
-import com.pictalk.AIimage.service.AIImageService;
+import com.pictalk.aiimage.dto.ImageRequestDto;
+import com.pictalk.aiimage.dto.ImageResponseDto;
+import com.pictalk.aiimage.service.AiImageService;
 import com.pictalk.global.payload.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/ai_images")
-public class AIImageController {
+public class AiImageController {
 
-    private final AIImageService aiImageService;
+    private final AiImageService aiImageService;
 
     @Operation(summary = "Create an AI-generated image")
     @PostMapping
