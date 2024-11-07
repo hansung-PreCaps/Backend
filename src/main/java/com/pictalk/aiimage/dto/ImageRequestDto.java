@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public class ImageRequestDto {
     @Getter
-    public static class CreateAIImageRequest {
+    public static class CreateAiImageRequest {
         private String situation;
         private String atmosphere;
     }

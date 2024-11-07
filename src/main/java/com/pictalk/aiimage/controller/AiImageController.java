@@ -22,8 +22,8 @@ public class AiImageController {
 
     @Operation(summary = "Create an AI-generated image")
     @PostMapping
-    public CommonResponse<ImageResponseDto.ImageResponse> createAIImage(@Valid @RequestBody ImageRequestDto.CreateAIImageRequest imageRequest) {
-        ImageResponseDto.ImageResponse imageResponse = aiImageService.createAIImage(imageRequest);
+    public CommonResponse<ImageResponseDto.ImageResponse> createAIImage(@Valid @RequestBody ImageRequestDto.CreateAiImageRequest imageRequest) {
+        ImageResponseDto.ImageResponse imageResponse = aiImageService.createAiImage(imageRequest);
         return CommonResponse.onSuccess(imageResponse);
     }
 

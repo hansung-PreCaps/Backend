@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class AiImageService {
 
-    private static final String promptTemplate = "Create a high-quality, detailed image depicting the following situation: \\\"%s\\\". The image should evoke the atmosphere or feeling of \\\"%s\\\".";
+    private static final String PROMPT_TEMPLATE = "Create a high-quality, detailed image depicting the following situation: \\\"%s\\\". The image should evoke the atmosphere or feeling of \\\"%s\\\".";
 
     private final OpenAIImageClient openAIImageClient;
 
-    public ImageResponseDto.ImageResponse createAIImage(@RequestBody ImageRequestDto.CreateAIImageRequest imageRequest) {
-        String prompt = String.format(promptTemplate,
+    public ImageResponseDto.ImageResponse createAiImage(@RequestBody ImageRequestDto.CreateAiImageRequest imageRequest) {
+        String prompt = String.format(PROMPT_TEMPLATE,
                 imageRequest.getSituation(),
                 imageRequest.getAtmosphere());
 
