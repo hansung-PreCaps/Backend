@@ -15,22 +15,26 @@ public enum ErrorStatus implements BaseStatus {
     FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_403", "금지된 요청입니다."),
 
     // User Error
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_1001", "사용자를 찾을 수 없습니다."),
-    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_1002", "이미 존재하는 사용자입니다."),
-    USER_USERNAME_NOT_MATCH(HttpStatus.BAD_REQUEST, "USER_1003", "사용자 이름이 일치하지 않습니다."),
-    USER_PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "USER_1004", "비밀번호가 일치하지 않습니다."),
-    USER_EMAIL_NOT_MATCH(HttpStatus.BAD_REQUEST, "USER_1005", "이메일이 일치하지 않습니다."),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "사용자를 찾을 수 없습니다."),
+    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_409", "이미 존재하는 사용자입니다."),
+    USER_USERNAME_NOT_MATCH(HttpStatus.BAD_REQUEST, "USER_NAME_400", "사용자 이름이 일치하지 않습니다."),
+    USER_PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "USER_PW_400", "비밀번호가 일치하지 않습니다."),
+    USER_EMAIL_NOT_MATCH(HttpStatus.BAD_REQUEST, "USER_EM_400", "이메일이 일치하지 않습니다."),
+    USER_USERNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_NAME_409", "이미 존재하는 사용자 이름입니다."),
+    USER_USERNAME_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_NAME_400", "사용자 이름이 유효하지 않습니다."),
 
-    USER_EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_1006", "이미 존재하는 이메일입니다."),
-    USER_USERNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_1007", "이미 존재하는 사용자 이름입니다."),
-    USER_PASSWORD_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_1008", "비밀번호는 최소 8자 이상이어야 하며, 하나 이상의 숫자, 특수 문자를 포함해야 합니다."),
-    USER_EMAIL_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_1009", "이메일이 유효하지 않습니다."),
-    USER_USERNAME_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_1010", "사용자 이름이 유효하지 않습니다."),
-    USER_REFRESH_TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_1011", "리프레시 토큰이 유효하지 않습니다."),
-    USER_REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "USER_1012", "리프레시 토큰이 만료되었습니다."),
-    USER_ACCESS_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "USER_1013", "액세스 토큰이 만료되었습니다."),
-    USER_ACCESS_TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_1014", "액세스 토큰이 유효하지 않습니다."),
-    OPENAI_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "OpenAI_4001", "openai server error");
+    PASSWORD_NOT_VALID(HttpStatus.BAD_REQUEST, "PW_400", "비밀번호는 최소 8자 이상이어야 하며, 하나 이상의 숫자, 특수 문자를 포함해야 합니다."),
+
+    EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "EM_409", "이미 존재하는 이메일입니다."),
+    EMAIL_NOT_VALID(HttpStatus.BAD_REQUEST, "EM_400", "이메일이 유효하지 않습니다."),
+
+    REFRESH_TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_RT_400", "리프레시 토큰이 유효하지 않습니다."),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "USER_RT_401", "리프레시 토큰이 만료되었습니다."),
+    ACCESS_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "USER_AT_401", "액세스 토큰이 만료되었습니다."),
+    ACCESS_TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_400", "액세스 토큰이 유효하지 않습니다."),
+
+    OPENAI_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "OpenAI_500", "openai server error"),
+    OPENAI_RESPONSE_NOT_FOUND(HttpStatus.BAD_GATEWAY, "OPENAI_502", "OpenAI response no content");
 
     private final HttpStatus httpStatus;
     private final String code;

@@ -47,7 +47,7 @@ public class UserController {
     @PostMapping("/refresh")
     public CommonResponse<String> refreshAccessToken(@RequestHeader("Authorization") String refreshToken) {
         if (!refreshToken.startsWith("Bearer ")) {
-            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
+            throw new GeneralException(ErrorStatus.REFRESH_TOKEN_NOT_VALID);
         }
         String token = refreshToken.substring(7);
         String newAccessToken = userService.refreshAccessToken(token);

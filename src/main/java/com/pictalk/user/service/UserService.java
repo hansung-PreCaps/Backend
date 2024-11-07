@@ -31,7 +31,7 @@ public class UserService {
             throw new GeneralException(ErrorStatus.USER_USERNAME_ALREADY_EXISTS);
         }
         if (userRepository.existsByEmail(createUser.getEmail())) {
-            throw new GeneralException(ErrorStatus.USER_EMAIL_ALREADY_EXISTS);
+            throw new GeneralException(ErrorStatus.EMAIL_ALREADY_EXISTS);
         }
 
         jwtRequestFilter.validatePassword(createUser.getPassword());
@@ -62,11 +62,11 @@ public class UserService {
     public void logout(HttpServletRequest request) {
         // Access Token 추출 및 존재 여부 확인
         String accessToken = jwtService.extractAccessToken(request)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_ACCESS_TOKEN_NOT_VALID));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ACCESS_TOKEN_NOT_VALID));
 
         // Access Token에서 이메일 추출 후 사용자 조회
         String email = jwtService.extractEmail(accessToken)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_ACCESS_TOKEN_NOT_VALID));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ACCESS_TOKEN_NOT_VALID));
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
@@ -78,17 +78,17 @@ public class UserService {
     // 리프레시 토큰을 이용한 액세스 토큰 재발급
     public String refreshAccessToken(String refreshToken) {
         if (!jwtService.isTokenValid(refreshToken)) {
-            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
+            throw new GeneralException(ErrorStatus.REFRESH_TOKEN_NOT_VALID);
         }
 
         String email = jwtService.extractEmail(refreshToken)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.REFRESH_TOKEN_NOT_VALID));
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         if (!refreshToken.equals(user.getRefreshToken())) {
-            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
+            throw new GeneralException(ErrorStatus.REFRESH_TOKEN_NOT_VALID);
         }
 
         // 새로운 액세스 토큰 생성
@@ -100,17 +100,17 @@ public class UserService {
 
     public LoginResponse refreshAllToken(String refreshToken) {
         if (!jwtService.isTokenValid(refreshToken)) {
-            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
+            throw new GeneralException(ErrorStatus.REFRESH_TOKEN_NOT_VALID);
         }
 
         String email = jwtService.extractEmail(refreshToken)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.REFRESH_TOKEN_NOT_VALID));
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         if (!refreshToken.equals(user.getRefreshToken())) {
-            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
+            throw new GeneralException(ErrorStatus.REFRESH_TOKEN_NOT_VALID);
         }
 
         // 새로운 액세스 토큰 생성
