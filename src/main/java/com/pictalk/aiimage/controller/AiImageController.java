@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/ai_images")
+@RequestMapping("/api/images")
 public class AiImageController {
 
     private final AiImageService aiImageService;
