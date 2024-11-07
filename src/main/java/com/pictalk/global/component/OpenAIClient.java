@@ -1,6 +1,7 @@
 package com.pictalk.global.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -29,9 +30,13 @@ public class OpenAIClient {
     private String openAiApiKey;
 
     private final CloseableHttpClient httpClient;
+    private final ObjectMapper mapper;
+
     private static final int TIMEOUT = 30000;
 
-    public OpenAIClient() {
+    public OpenAIClient(ObjectMapper mapper) {
+        this.mapper = mapper;
+
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(TIMEOUT)
                 .setSocketTimeout(TIMEOUT)
@@ -53,22 +58,23 @@ public class OpenAIClient {
 
             HttpResponse response = httpClient.execute(httpPost);
             int statusCode = response.getStatusLine().getStatusCode();
+            String responseBody = EntityUtils.toString(response.getEntity());
 
             if (statusCode != 200) {
-                String responseBody = EntityUtils.toString(response.getEntity());
                 throw new GeneralException(ErrorStatus.OPENAI_SERVER_ERROR);
             }
-            return EntityUtils.toString(response.getEntity());
+
+            // Extract the content from the response JSON
+            return extractContent(responseBody);
 
         } catch (IOException e) {
-            throw new RuntimeException("OpenAI API 호출 실패", e);
+            throw new GeneralException(ErrorStatus.OPENAI_SERVER_ERROR);
         }
     }
 
     private String createRequestBody(String prompt) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         ObjectNode json = mapper.createObjectNode();
-        json.put("model", "gpt-3.5-turbo");
+        json.put("model", "gpt-4o-mini");
 
         ArrayNode messages = mapper.createArrayNode();
         ObjectNode message = mapper.createObjectNode();
@@ -78,9 +84,22 @@ public class OpenAIClient {
         json.set("messages", messages);
 
         json.put("max_tokens", 1000);
-        json.put("temperature", 1);
+        json.put("temperature", 0.8);
 
         return mapper.writeValueAsString(json);
+    }
+
+    private String extractContent(String responseBody) throws JsonProcessingException {
+        // Parse the JSON response and retrieve the "content" field from the message
+        JsonNode root = mapper.readTree(responseBody);
+        JsonNode messageContent = root.path("choices").get(0).path("message").path("content");
+
+        // Check if the content node exists and return its text value
+        if (!messageContent.isMissingNode()) {
+            return messageContent.asText();
+        } else {
+            throw new GeneralException(ErrorStatus.OPENAI_RESPONSE_NOT_FOUND);
+        }
     }
 
 
