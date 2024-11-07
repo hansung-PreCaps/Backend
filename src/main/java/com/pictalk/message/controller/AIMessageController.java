@@ -19,7 +19,7 @@ public class AIMessageController {
 
     @PostMapping
     public CommonResponse<MessageResponseDto.CreateAIMessageResponse> createMessage(@RequestBody MessageRequestDto.CreateAIMessageRequest message) {
-        MessageResponseDto.CreateAIMessageResponse createAIMessageResponse = aiMessageService.generateMessage(message.getSituation());
+        MessageResponseDto.CreateAIMessageResponse createAIMessageResponse = aiMessageService.generateMessage(message);
         return CommonResponse.onSuccess(createAIMessageResponse);
 
     }
