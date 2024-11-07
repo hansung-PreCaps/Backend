@@ -3,6 +3,8 @@ package com.pictalk.global.component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pictalk.global.exception.GeneralException;
+import com.pictalk.global.payload.status.ErrorStatus;
 import java.io.IOException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -24,9 +26,12 @@ public class OpenAIImageClient {
     private String openAiApiKey;
 
     private final CloseableHttpClient httpClient;
+    private final ObjectMapper mapper;
     private static final int TIMEOUT = 30000;
 
-    public OpenAIImageClient() {
+    public OpenAIImageClient(ObjectMapper mapper) {
+        this.mapper = mapper;
+
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(TIMEOUT)
                 .setSocketTimeout(TIMEOUT)
@@ -54,20 +59,19 @@ public class OpenAIImageClient {
 
             if (statusCode != 200) {
                 // Handle error
-                throw new RuntimeException("Failed to call OpenAI API: " + responseBody);
+                throw new GeneralException(ErrorStatus.OPENAI_SERVER_ERROR);
             }
 
             // Parse the response to extract the image URL
             return parseImageUrl(responseBody);
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to call OpenAI API", e);
+            throw new GeneralException(ErrorStatus.OPENAI_SERVER_ERROR);
         }
     }
 
     private String createRequestBody(String prompt) throws JsonProcessingException {
         // Use Jackson to create JSON request body
-        ObjectMapper mapper = new ObjectMapper();
         JsonNode json = mapper.createObjectNode()
                 .put("prompt", prompt)
                 .put("n", 1) // Number of images to generate
@@ -78,7 +82,6 @@ public class OpenAIImageClient {
 
     private String parseImageUrl(String responseBody) throws JsonProcessingException {
         // Parse the JSON response to get the image URL
-        ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(responseBody);
 
         // The response structure:
@@ -89,7 +92,7 @@ public class OpenAIImageClient {
             String imageUrl = firstItem.path("url").asText();
             return imageUrl;
         } else {
-            throw new RuntimeException("No image URL found in OpenAI API response.");
+            throw new GeneralException(ErrorStatus.OPENAI_SERVER_ERROR);
         }
     }
 }
