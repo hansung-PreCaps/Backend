@@ -57,7 +57,7 @@ public class MessageService {
         sendSms(message, receivers);
 
         SendMessageResponse response = SendMessageResponse.builder()
-                .external_message_Id(String.valueOf(message.getId()))
+                .externalMessageId(String.valueOf(message.getId()))
                 .status("sent")
                 .build();
 
@@ -75,7 +75,7 @@ public class MessageService {
         List<Message> messages = messageRepository.findAllByIsDeletedFalse();
 
         return messages.stream().map(message -> MessageResponse.builder()
-                .message_id(message.getId())
+                .messageId(message.getId())
                 .content(message.getContent())
                 .to(getReceiversAsString(message.getReceivers()))
                 .sendTime(message.getSentAt() != null ? message.getSentAt().toString() : null)
@@ -95,7 +95,7 @@ public class MessageService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MESSAGE_NOT_FOUND));
 
         return MessageResponse.builder()
-                .message_id(message.getId())
+                .messageId(message.getId())
                 .content(message.getContent())
                 .to(getReceiversAsString(message.getReceivers()))
                 .sendTime(message.getSentAt() != null ? message.getSentAt().toString() : null)
@@ -111,7 +111,7 @@ public class MessageService {
         messageRepository.save(message);
 
         return CancelMessageResponse.builder()
-                .message_id(message.getId())
+                .messageId(message.getId())
                 .status("reserve")
                 .build();
     }

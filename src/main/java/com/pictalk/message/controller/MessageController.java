@@ -29,20 +29,20 @@ public class MessageController {
         return CommonResponse.onSuccess(messages);
     }
 
-    @GetMapping("/{message_id}")
-    public CommonResponse<MessageResponse> getMessage(@PathVariable("message_id") Long messageId) {
+    @GetMapping("/{message-id}")
+    public CommonResponse<MessageResponse> getMessage(@PathVariable("message-id") Long messageId) {
         MessageResponse response = messageService.getMessage(messageId);
         return CommonResponse.onSuccess(response);
     }
 
-    @PatchMapping("/{message_id}")
-    public CommonResponse<CancelMessageResponse> cancelScheduledMessage(@PathVariable("message_id") Long messageId) {
+    @PatchMapping("/{message-id}")
+    public CommonResponse<CancelMessageResponse> cancelScheduledMessage(@PathVariable("message-id") Long messageId) {
         CancelMessageResponse response = messageService.cancelScheduledMessage(messageId);
         return CommonResponse.onSuccess(response);
     }
 
-    @DeleteMapping("/{message_id}")
-    public CommonResponse<Void> deleteMessage(@PathVariable("message_id") Long messageId) {
+    @DeleteMapping("/{message-id}")
+    public CommonResponse<Void> deleteMessage(@PathVariable("message-id") Long messageId) {
         messageService.deleteMessage(messageId);
         return CommonResponse.onSuccess(null);
     }

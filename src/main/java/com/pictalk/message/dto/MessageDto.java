@@ -64,7 +64,7 @@ public class MessageDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SendMessageResponse {
-        private String external_message_Id;
+        private String externalMessageId;
         private String status;
     }
 
@@ -73,7 +73,7 @@ public class MessageDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MessageResponse {
-        private Long message_id;
+        private Long messageId;
         private String content;
         private String to;
         private String sendTime;
@@ -85,7 +85,7 @@ public class MessageDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CancelMessageResponse {
-        private Long message_id;
+        private Long messageId;
         private String status;
     }
 }
