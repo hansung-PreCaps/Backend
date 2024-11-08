@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SenderRepository extends JpaRepository<Sender, Long> {
-    Optional<Sender> findByPhoneNumber(String phoneNumber);
+    Optional<Sender> findSenderByPhoneNumber(String phoneNumber);
 }

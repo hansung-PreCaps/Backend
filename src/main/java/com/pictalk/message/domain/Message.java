@@ -40,10 +40,14 @@ public class Message extends BaseEntity {
 
     private String content;
 
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
     private LocalDateTime sentAt;
 
     @Builder.Default
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 
     public void addReceivers(List<Receiver> receivers) {
         this.receivers.addAll(receivers);
@@ -56,6 +60,6 @@ public class Message extends BaseEntity {
     }
 
     public void softDelete() {
-        this.isDeleted = true;
+        this.deleted = true;
     }
 }

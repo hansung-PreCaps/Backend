@@ -26,7 +26,7 @@ public class MessageService {
 
     public SendMessageResponse sendMessage(SendMessageRequest request) {
         // Sender 조회 또는 생성
-        Sender sender = senderRepository.findByPhoneNumber(request.getFrom())
+        Sender sender = senderRepository.findSenderByPhoneNumber(request.getFrom())
                 .orElseGet(() -> senderRepository.save(
                         Sender.builder()
                                 .nickname(request.getFrom())
@@ -73,7 +73,7 @@ public class MessageService {
     }
 
     public List<MessageResponse> getMessages() {
-        List<Message> messages = messageRepository.findAllByIsDeletedFalse();
+        List<Message> messages = messageRepository.findAllByDeletedFalse();
 
         return messages.stream().map(message -> MessageResponse.builder()
                 .messageId(message.getId())
