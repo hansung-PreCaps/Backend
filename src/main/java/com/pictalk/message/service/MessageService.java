@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class MessageService {
     private final SenderRepository senderRepository;
     private final ReceiverRepository receiverRepository;
 
+    @Transactional
     public SendMessageResponse sendMessage(SendMessageRequest request) {
         // Sender 조회 또는 생성
         Sender sender = senderRepository.findSenderByPhoneNumber(request.getFrom())
@@ -104,6 +106,7 @@ public class MessageService {
                 .build();
     }
 
+    @Transactional
     public CancelMessageResponse cancelScheduledMessage(Long messageId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MESSAGE_NOT_FOUND));
@@ -117,6 +120,7 @@ public class MessageService {
                 .build();
     }
 
+    @Transactional
     public void deleteMessage(Long messageId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MESSAGE_NOT_FOUND));
