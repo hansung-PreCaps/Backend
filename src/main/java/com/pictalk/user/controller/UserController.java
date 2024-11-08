@@ -1,12 +1,11 @@
 package com.pictalk.user.controller;
 
 import com.pictalk.global.exception.GeneralException;
-import com.pictalk.global.payload.status.ErrorStatus;
 import com.pictalk.global.payload.response.CommonResponse;
-import com.pictalk.user.domain.dto.UserRequestDto;
-import com.pictalk.user.domain.dto.UserResponseDto.LoginResponse;
-import com.pictalk.user.domain.dto.UserResponseDto.UserResponse;
-
+import com.pictalk.global.payload.status.ErrorStatus;
+import com.pictalk.user.dto.UserRequestDto;
+import com.pictalk.user.dto.UserResponseDto.LoginResponse;
+import com.pictalk.user.dto.UserResponseDto.UserResponse;
 import com.pictalk.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
@@ -32,10 +31,11 @@ public class UserController {
 
     @PostMapping("/signin")
     public CommonResponse<LoginResponse> login(@Valid @RequestBody UserRequestDto.LoginUser loginUser) {
-        LoginResponse loginResponse =  userService.login(loginUser);
+        LoginResponse loginResponse = userService.login(loginUser);
         return CommonResponse.onSuccess(loginResponse);
 
     }
+
     // 로그아웃 엔드포인트
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
@@ -47,7 +47,7 @@ public class UserController {
     @PostMapping("/refresh")
     public CommonResponse<String> refreshAccessToken(@RequestHeader("Authorization") String refreshToken) {
         if (!refreshToken.startsWith("Bearer ")) {
-            throw new GeneralException(ErrorStatus.USER_REFRESH_TOKEN_NOT_VALID);
+            throw new GeneralException(ErrorStatus.REFRESH_TOKEN_NOT_VALID);
         }
         String token = refreshToken.substring(7);
         String newAccessToken = userService.refreshAccessToken(token);
