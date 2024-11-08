@@ -2,12 +2,11 @@ package com.pictalk.message.domain;
 
 import com.pictalk.group.domain.GroupReceiver;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.*;
 
 @Entity
 @Table(name = "receiver")
@@ -39,7 +38,7 @@ public class Receiver {
     private LocalDateTime createdAt;
 
     @Builder.Default
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 
     @PrePersist
     protected void onCreate() {

@@ -3,12 +3,11 @@ package com.pictalk.message.domain;
 import com.pictalk.image.domain.Image;
 import com.pictalk.global.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.*;
 
 @Entity
 @Table(name = "message")
