@@ -1,7 +1,8 @@
 package com.pictalk.message.controller;
 
 import com.pictalk.global.payload.response.CommonResponse;
-import com.pictalk.message.dto.MessageDto.*;
+import com.pictalk.message.dto.MessageRequestDto.SendMessageRequest;
+import com.pictalk.message.dto.MessageResponseDto.*;
 import com.pictalk.message.service.MessageService;
 import jakarta.validation.Valid;
 

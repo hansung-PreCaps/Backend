@@ -1,10 +1,13 @@
 package com.pictalk.message.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
-import lombok.*;
-
-public class MessageDto {
+public class MessageRequestDto {
 
     @Getter
     @Builder
@@ -57,35 +60,5 @@ public class MessageDto {
         private String name;
         private int size;
         private String data;
-    }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class SendMessageResponse {
-        private String externalMessageId;
-        private String status;
-    }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class MessageResponse {
-        private Long messageId;
-        private String content;
-        private String to;
-        private String sendTime;
-        private String status;
-    }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class CancelMessageResponse {
-        private Long messageId;
-        private String status;
     }
 }
