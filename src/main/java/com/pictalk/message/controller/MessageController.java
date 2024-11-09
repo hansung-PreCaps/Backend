@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,32 +21,37 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/send")
-    public CommonResponse<SendMessageResponse> sendMessage(@Valid @RequestBody SendMessageRequest request) {
-        SendMessageResponse response = messageService.sendMessage(request);
+    public CommonResponse<SendMessageResponse> sendMessage(@AuthenticationPrincipal UserDetails authenticatedPrincipal, @Valid @RequestBody SendMessageRequest request) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        SendMessageResponse response = messageService.sendMessage(request, userEmail);
         return CommonResponse.onSuccess(response);
     }
 
     @GetMapping
-    public CommonResponse<List<MessageResponse>> getMessages() {
-        List<MessageResponse> messages = messageService.getMessages();
+    public CommonResponse<List<MessageResponse>> getMessages(@AuthenticationPrincipal UserDetails authenticatedPrincipal) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        List<MessageResponse> messages = messageService.getMessages(userEmail);
         return CommonResponse.onSuccess(messages);
     }
 
     @GetMapping("/{message-id}")
-    public CommonResponse<MessageResponse> getMessage(@PathVariable("message-id") Long messageId) {
-        MessageResponse response = messageService.getMessage(messageId);
+    public CommonResponse<MessageResponse> getMessage(@AuthenticationPrincipal UserDetails authenticatedPrincipal, @PathVariable("message-id") Long messageId) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        MessageResponse response = messageService.getMessage(messageId, userEmail);
         return CommonResponse.onSuccess(response);
     }
 
     @PatchMapping("/{message-id}")
-    public CommonResponse<CancelMessageResponse> cancelScheduledMessage(@PathVariable("message-id") Long messageId) {
-        CancelMessageResponse response = messageService.cancelScheduledMessage(messageId);
+    public CommonResponse<CancelMessageResponse> cancelScheduledMessage(@AuthenticationPrincipal UserDetails authenticatedPrincipal, @PathVariable("message-id") Long messageId) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        CancelMessageResponse response = messageService.cancelScheduledMessage(messageId, userEmail);
         return CommonResponse.onSuccess(response);
     }
 
     @DeleteMapping("/{message-id}")
-    public CommonResponse<Void> deleteMessage(@PathVariable("message-id") Long messageId) {
-        messageService.deleteMessage(messageId);
+    public CommonResponse<Void> deleteMessage(@AuthenticationPrincipal UserDetails authenticatedPrincipal, @PathVariable("message-id") Long messageId) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        messageService.deleteMessage(messageId, userEmail);
         return CommonResponse.onSuccess(null);
     }
 }
