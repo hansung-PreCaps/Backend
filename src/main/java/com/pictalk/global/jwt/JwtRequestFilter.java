@@ -4,7 +4,6 @@ import com.pictalk.global.exception.GeneralException;
 import com.pictalk.global.payload.status.ErrorStatus;
 import com.pictalk.user.domain.User;
 import com.pictalk.user.repository.UserRepository;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -69,19 +68,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     public void validatePassword(String password) {
         if (password == null || password.length() < 8) {
-            throw new GeneralException(ErrorStatus.USER_PASSWORD_NOT_VALID);
+            throw new GeneralException(ErrorStatus.PASSWORD_NOT_VALID);
         }
 
         if (!password.matches(".*[a-z].*")) {
-            throw new GeneralException(ErrorStatus.USER_PASSWORD_NOT_VALID);
+            throw new GeneralException(ErrorStatus.PASSWORD_NOT_VALID);
         }
 
         if (!password.matches(".*\\d.*")) {
-            throw new GeneralException(ErrorStatus.USER_PASSWORD_NOT_VALID);
+            throw new GeneralException(ErrorStatus.PASSWORD_NOT_VALID);
         }
 
         if (!password.matches(".*[!@#$%^&*()].*")) {
-            throw new GeneralException(ErrorStatus.USER_PASSWORD_NOT_VALID);
+            throw new GeneralException(ErrorStatus.PASSWORD_NOT_VALID);
         }
     }
 }

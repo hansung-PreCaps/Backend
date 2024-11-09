@@ -14,6 +14,9 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
   config:
     import: "optional:file:.env[.properties]"
 
@@ -32,3 +35,8 @@ jwt:
     expiration: 86400000
     header: Refresh
   secret: ${JWT_SECURITY_KEY}
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
+    url: ${OPENAI_API_URL}

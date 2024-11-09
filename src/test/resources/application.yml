@@ -16,6 +16,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
   config:
     import: "optional:file:backend-secret.env[.properties]"
 
@@ -27,3 +30,9 @@ jwt:
     expiration: 86400000
     header: Refresh
   secret: c78396f54bd363ab87285f208e4846f05ce28c16ac4d47e0ab4c6868e94fb02fdff9e3cc9807f2c3bcbc8dc462ca366fb5b3249933968c02225838776c40a7e5
+
+
+openai:
+  api:
+    key: MockOpenAIKey
+    url: MockOpenAIUrl

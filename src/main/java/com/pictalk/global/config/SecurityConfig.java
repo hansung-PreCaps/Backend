@@ -59,10 +59,7 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                "/users/signup",
-                                "/users/signin",
-                                "/users/refresh",
-                                "/users/logout",
+                                "/api/users/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",

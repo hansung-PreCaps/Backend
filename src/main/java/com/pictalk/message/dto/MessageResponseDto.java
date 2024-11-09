@@ -36,4 +36,10 @@ public class MessageResponseDto {
         private Long messageId;
         private String status;
     }
+
+    @Getter
+    @Builder
+    public static class CreateAIMessageResponse {
+        private String message;
+    }
 }

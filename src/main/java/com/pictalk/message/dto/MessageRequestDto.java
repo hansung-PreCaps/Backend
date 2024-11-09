@@ -61,4 +61,10 @@ public class MessageRequestDto {
         private int size;
         private String data;
     }
+
+    @Getter
+    public static class CreateAIMessageRequest {
+        private String situation;
+        private List<String> keyword;
+    }
 }

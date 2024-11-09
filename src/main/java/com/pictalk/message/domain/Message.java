@@ -1,6 +1,6 @@
 package com.pictalk.message.domain;
 
-import com.pictalk.image.domain.Image;
+import com.pictalk.aiimage.domain.Image;
 import com.pictalk.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
