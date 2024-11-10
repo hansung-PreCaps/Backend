@@ -1,33 +1,21 @@
 package com.pictalk.message.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import com.pictalk.aiimage.domain.Image;
+import com.pictalk.global.common.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "message")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Message {
+public class Message extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,13 +26,13 @@ public class Message {
     @JoinColumn(name = "sender_id", nullable = false)
     private Sender sender;
 
-    @OneToMany(mappedBy = "message")
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Receiver> receivers = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "message")
-//    @Builder.Default
-//    private List<Image> images = new ArrayList<>();
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Image> images = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private MessageStatus status; // [SCHEDULED, SENT, CANCELLED]
@@ -58,16 +46,19 @@ public class Message {
     private LocalDateTime sentAt;
 
     @Builder.Default
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
+    public void addReceivers(List<Receiver> receivers) {
+        this.receivers.addAll(receivers);
     }
 
-    public Message(Sender sender, MessageStatus status, String content) {
-        this.sender = sender;
-        this.status = status;
-        this.content = content;
+    public void cancel() {
+        if (this.status == MessageStatus.SCHEDULED) {
+            this.status = MessageStatus.CANCELLED;
+        }
+    }
+
+    public void softDelete() {
+        this.deleted = true;
     }
 }

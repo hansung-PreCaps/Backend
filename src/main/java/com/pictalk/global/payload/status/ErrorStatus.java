@@ -34,7 +34,11 @@ public enum ErrorStatus implements BaseStatus {
     ACCESS_TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST, "USER_400", "액세스 토큰이 유효하지 않습니다."),
 
     OPENAI_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "OpenAI_500", "openai server error"),
-    OPENAI_RESPONSE_NOT_FOUND(HttpStatus.BAD_GATEWAY, "OPENAI_502", "OpenAI response no content");
+    OPENAI_RESPONSE_NOT_FOUND(HttpStatus.BAD_GATEWAY, "OPENAI_502", "OpenAI response no content"),
+
+    // Message Error
+    MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "MESSAGE_2001", "메시지를 찾을 수 없습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;
