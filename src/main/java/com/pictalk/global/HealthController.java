@@ -22,4 +22,12 @@ public class HealthController {
         return CommonResponse.onSuccess("성공 응답");
     }
 
+    /**
+     * ELB가 go-away하도록 만드는 더미 페이지
+     */
+    @GetMapping("/")
+    public String index() {
+        return "Hello, Pictalk!";
+    }
+
 }
