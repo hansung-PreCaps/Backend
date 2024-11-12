@@ -23,7 +23,7 @@ spring:
     import: "optional:file:backend-secret.env[.properties]"
 
 server:
-  domain: ${SERVER_DOMAIN}
+  domain: localhost
 
 jwt:
   access:
