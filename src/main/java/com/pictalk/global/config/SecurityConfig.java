@@ -46,9 +46,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
                                 "/swagger/**",
-                                "/health",
-                                "/api/**",
-                                "/test-s3-connection"
+                                "/health"
                         ).permitAll() // /auth/** 엔드포인트는 인증 없이 접근 가능
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 )
