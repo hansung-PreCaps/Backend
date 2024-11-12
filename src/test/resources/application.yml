@@ -22,6 +22,9 @@ spring:
   config:
     import: "optional:file:backend-secret.env[.properties]"
 
+server:
+  domain: ${SERVER_DOMAIN}
+
 jwt:
   access:
     expiration: 86400000
