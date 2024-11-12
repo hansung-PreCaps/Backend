@@ -20,6 +20,9 @@ spring:
   config:
     import: "optional:file:.env[.properties]"
 
+server:
+  domain: ${SERVER_DOMAIN}
+
 springdoc:
   swagger-ui:
     path: /swagger
