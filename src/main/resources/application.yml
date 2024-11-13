@@ -43,3 +43,15 @@ openai:
   api:
     key: ${OPENAI_API_KEY}
     url: ${OPENAI_API_URL}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    s3:
+      bucket: ${AWS_S3_BUCKET_NAME}
+    region:
+      static: ${AWS_S3_REGION}
+    stack:
+      auto: false
