@@ -39,6 +39,13 @@ public class MessageResponseDto {
 
     @Getter
     @Builder
+    public static class TempMessageResponse {
+        private Long messageId;
+        private String status;
+    }
+
+    @Getter
+    @Builder
     public static class CreateAIMessageResponse {
         private String message;
     }

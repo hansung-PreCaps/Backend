@@ -63,6 +63,13 @@ public class MessageRequestDto {
     }
 
     @Getter
+    public static class TempMessageRequest {
+        private String content;
+        private String to;
+        private String sendTime;
+    }
+
+    @Getter
     public static class CreateAIMessageRequest {
         private String situation;
         private List<String> keyword;

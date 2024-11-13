@@ -14,9 +14,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -61,8 +63,14 @@ public class Message extends BaseEntity {
     @Builder.Default
     private boolean deleted = false;
 
-    public void addReceivers(List<Receiver> receivers) {
-        this.receivers.addAll(receivers);
+    public void addReceivers(List<Receiver> newReceivers) {
+        this.receivers.addAll(newReceivers);
+        newReceivers.forEach(receiver -> receiver.associateWithMessage(this));
+    }
+
+    public void addReceiver(Receiver receiver) {
+        this.receivers.add(receiver);
+        receiver.associateWithMessage(this);
     }
 
     public void cancel() {

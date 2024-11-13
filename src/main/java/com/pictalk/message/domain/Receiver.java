@@ -44,4 +44,8 @@ public class Receiver {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
+
+    public void associateWithMessage(Message message) {
+        this.message = message;
+    }
 }

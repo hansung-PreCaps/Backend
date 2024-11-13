@@ -3,7 +3,9 @@ package com.pictalk.message.controller;
 import com.pictalk.global.payload.response.CommonResponse;
 import com.pictalk.message.dto.MessageRequestDto.SendMessageRequest;
 import com.pictalk.message.dto.MessageResponseDto.*;
+import com.pictalk.message.dto.MessageRequestDto.TempMessageRequest;
 import com.pictalk.message.service.MessageService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,5 +54,15 @@ public class MessageController {
         String userEmail = authenticatedPrincipal.getUsername();
         messageService.deleteMessage(messageId, userEmail);
         return CommonResponse.onSuccess(null);
+    }
+
+    @Operation(summary = "Save a temporary message")
+    @PostMapping("/temp")
+    public CommonResponse<TempMessageResponse> saveTempMessage(
+            @AuthenticationPrincipal UserDetails authenticatedPrincipal,
+            @Valid @RequestBody TempMessageRequest request) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        TempMessageResponse response = messageService.saveTempMessage(request, userEmail);
+        return CommonResponse.onSuccess(response);
     }
 }

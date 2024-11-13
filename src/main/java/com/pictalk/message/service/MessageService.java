@@ -6,6 +6,7 @@ import com.pictalk.message.domain.*;
 import com.pictalk.message.dto.MessageRequestDto.*;
 import com.pictalk.message.dto.MessageResponseDto.*;
 import com.pictalk.message.repository.MessageRepository;
+import com.pictalk.message.repository.SenderRepository;
 import com.pictalk.user.domain.User;
 import com.pictalk.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MessageService {
     private final MessageRepository messageRepository;
+    private final SenderRepository senderRepository;
     private final UserRepository userRepository;
     private final ImmediateMessageService immediateMessageService;
     private final ScheduledMessageService scheduledMessageService;
@@ -93,5 +95,39 @@ public class MessageService {
     @Transactional
     public CancelMessageResponse cancelScheduledMessage(Long messageId, String userEmail) {
         return scheduledMessageService.cancelScheduledMessage(messageId, userEmail);
+    }
+
+    @Transactional
+    public TempMessageResponse saveTempMessage(TempMessageRequest request, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        Sender sender = senderRepository.findSenderByPhoneNumber(request.getTo())
+                .orElseGet(() -> senderRepository.save(
+                        Sender.builder()
+                                .user(user)
+                                .phoneNumber(request.getTo())
+                                .build()
+                ));
+
+        Message tempMessage = Message.builder()
+                .sender(sender)
+                .content(request.getContent())
+                .status(MessageStatus.TEMP)
+                .sentAt(LocalDateTime.parse(request.getSendTime()))
+                .build();
+
+        Receiver receiver = Receiver.builder()
+                .message(tempMessage)
+                .phoneNumber(request.getTo())
+                .build();
+
+        tempMessage.addReceiver(receiver);
+        Message savedMessage = messageRepository.save(tempMessage);
+
+        return TempMessageResponse.builder()
+                .messageId(savedMessage.getId())
+                .status("temp")
+                .build();
     }
 }
