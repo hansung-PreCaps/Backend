@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +25,10 @@ public class ImageController {
     // 이미지 업로드
     @Operation(summary = "이미지 업로드")
     @PostMapping(value = "/messages/{message_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<CommonResponse> uploadImage(@PathVariable("message_id") Long messageId,
-                                                      @RequestPart(name = "image_file")
-                                                      @Valid MultipartFile imageFile) {
+    public CommonResponse<Object> uploadImage(@PathVariable("message_id") Long messageId,
+                                              @RequestPart(name = "image_file")
+                                              @Valid MultipartFile imageFile) {
         messageImageService.createImage(messageId, imageFile);
-        return ResponseEntity.ok(CommonResponse.of(SuccessStatus.UPLOAD_IMAGE_SUCCESS, null));
+        return CommonResponse.of(SuccessStatus.UPLOAD_IMAGE_SUCCESS, null);
     }
 }
