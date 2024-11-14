@@ -35,4 +35,11 @@ public class MessageImageService {
         messageImageRepository.findAllByMessage(message);
     }
 
+    public MessageImage getImage(Long messageId) {
+        final Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MESSAGE_NOT_FOUND));
+        message.getMessageImages();
+        MessageImage messageImage = messageImageRepository.findByMessage(message);
+        return messageImage;
+    }
 }
