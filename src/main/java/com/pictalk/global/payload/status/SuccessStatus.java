@@ -13,7 +13,9 @@ public enum SuccessStatus implements BaseStatus {
     CREATED(HttpStatus.CREATED, "COMMON_201", "성공적으로 생성되었습니다."),
     NO_CONTENT(HttpStatus.NO_CONTENT, "COMMON_204", "성공적으로 삭제되었습니다."),
 
-    UPLOAD_IMAGE_SUCCESS(HttpStatus.CREATED, "IMAGE_201", "이미지가 성공적으로 저장되었습니다");
+    UPLOAD_IMAGE_SUCCESS(HttpStatus.CREATED, "IMAGE_201", "이미지가 성공적으로 저장되었습니다"),
+    GET_IMAGE_SUCCESS(HttpStatus.OK, "IMAGE_200", "이미지가 성공적으로 조회되었습니다"),
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;
