@@ -50,4 +50,7 @@ public class Group extends BaseEntity {
         groupReceivers.add(groupReceiver);
     }
 
+    public void update(String groupName) {
+        this.name = groupName;
+    }
 }
