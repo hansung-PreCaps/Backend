@@ -47,8 +47,7 @@ public class Receiver extends BaseEntity {
     private String phoneNumber;
 
     @Builder
-    public Receiver(Message message, String nickname, String phoneNumber) {
-        this.message = message;
+    public Receiver(String nickname, String phoneNumber) {
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
     }

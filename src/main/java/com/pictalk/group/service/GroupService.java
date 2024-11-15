@@ -20,8 +20,8 @@ public class GroupService {
     private final GroupRepository groupRepository;
 
     @Transactional
-    public Group createGroup(CreateGroupRequest createGroupRequest) {
-        User user = userRepository.findById(createGroupRequest.getUserId())
+    public Group createGroup(CreateGroupRequest createGroupRequest, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         Group group = Group.builder()
@@ -41,8 +41,8 @@ public class GroupService {
     }
 
 
-    public List<Group> getAllGroupByUser(Long userId) {
-        User user = userRepository.findById(userId)
+    public List<Group> getAllGroupByUser(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         return groupRepository.findAllByUser(user);
     }

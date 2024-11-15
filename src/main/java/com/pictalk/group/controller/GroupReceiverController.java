@@ -6,7 +6,7 @@ import com.pictalk.group.domain.GroupReceiver;
 import com.pictalk.group.dto.GroupRequestDto.AddMemberRequest;
 import com.pictalk.group.dto.GroupResponseDto;
 import com.pictalk.group.service.GroupReceiverService;
-import com.pictalk.group.service.GroupService;
+import com.pictalk.group.service.facade.CreateGroupReceiverFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,16 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/group-receivers")
 public class GroupReceiverController {
     private final GroupReceiverService groupReceiverService;
-    private final GroupService groupService;
+    private final CreateGroupReceiverFacade createGroupReceiverFacade;
 
     // 그룹 멤버 추가
+    @Operation(summary = "그룹 리시버 추가")
     @PostMapping
     public CommonResponse<Object> addGroupReceiver(@RequestBody AddMemberRequest addMemberRequest) {
-        groupReceiverService.addGroupReceiver(addMemberRequest);
+        createGroupReceiverFacade.addGroupReceiver(addMemberRequest);
         return CommonResponse.of(SuccessStatus.GROUP_RECEIVER_ADDED, null);
     }
 
     // 그룹 멤버 삭제
+    @Operation(summary = "그룹 리시버 삭제")
     @DeleteMapping("/{group_receiver_id}")
     public CommonResponse<Object> deleteGroupReceiver(@PathVariable("group_receiver_id") Long groupReceiverId) {
         groupReceiverService.deleteGroupReceiver(groupReceiverId);

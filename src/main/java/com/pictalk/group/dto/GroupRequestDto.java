@@ -1,11 +1,11 @@
 package com.pictalk.group.dto;
 
+import java.util.List;
 import lombok.Getter;
 
 public class GroupRequestDto {
     @Getter
     public static class CreateGroupRequest {
-        private Long userId;
         private String groupName;
     }
 
@@ -17,7 +17,11 @@ public class GroupRequestDto {
     @Getter
     public static class AddMemberRequest {
         private Long groupId;
-        private Long receiverId;
+        private List<GroupReceiverDto> groupReceivers;
+    }
+
+    @Getter
+    public static class GroupReceiverDto {
         private String nickname;
         private String phoneNumber;
     }

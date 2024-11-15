@@ -2,6 +2,7 @@ package com.pictalk.group.domain;
 
 import com.pictalk.global.common.BaseEntity;
 import com.pictalk.user.domain.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,7 +36,7 @@ public class Group extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupReceiver> groupReceivers = new ArrayList<>();
 
     private String name;
