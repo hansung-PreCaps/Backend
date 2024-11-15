@@ -15,8 +15,6 @@ public enum SuccessStatus implements BaseStatus {
 
     UPLOAD_IMAGE_SUCCESS(HttpStatus.CREATED, "IMAGE_201", "이미지가 성공적으로 저장되었습니다"),
     GET_IMAGE_SUCCESS(HttpStatus.OK, "IMAGE_200", "이미지가 성공적으로 조회되었습니다"),
-    ;
-    UPLOAD_IMAGE_SUCCESS(HttpStatus.CREATED, "IMAGE_201", "이미지가 성공적으로 저장되었습니다"),
     GROUP_CREATED(HttpStatus.CREATED, "GROUP_201", "그룹이 성공적으로 생성되었습니다"),
     GROUP_DELETED(HttpStatus.NO_CONTENT, "GROUP_204", "그룹이 성공적으로 삭제되었습니다"),
     GROUP_UPDATED(HttpStatus.OK, "GROUP_200", "그룹 이름 변경이 성공적으로 처리되었습니다."),
