@@ -60,4 +60,4 @@ ppurio:
   api:
     url: ${PPURIO_API_URL}
     key: ${PPURIO_API_KEY}
-    account: ${PPURIO_ACCOUNT}
+    account: ${PPURIO_API_ACCOUNT}

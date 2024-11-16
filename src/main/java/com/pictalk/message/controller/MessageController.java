@@ -1,7 +1,9 @@
 package com.pictalk.message.controller;
 
 import com.pictalk.global.payload.response.CommonResponse;
+import com.pictalk.message.dto.MessageRequestDto;
 import com.pictalk.message.dto.MessageRequestDto.SendMessageRequest;
+import com.pictalk.message.dto.MessageResponseDto;
 import com.pictalk.message.dto.MessageResponseDto.*;
 import com.pictalk.message.dto.MessageRequestDto.TempMessageRequest;
 import com.pictalk.message.service.MessageService;
@@ -22,9 +24,9 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/send")
-    public CommonResponse<SendMessageResponse> sendMessage(@AuthenticationPrincipal UserDetails authenticatedPrincipal, @Valid @RequestBody SendMessageRequest request) {
+    public CommonResponse<MessageResponseDto.SendMessageResponse> sendMessage(@AuthenticationPrincipal UserDetails authenticatedPrincipal, @Valid @RequestBody MessageRequestDto.SendMessageRequest request) {
         String userEmail = authenticatedPrincipal.getUsername();
-        SendMessageResponse response = messageService.sendMessage(request, userEmail);
+        MessageResponseDto.SendMessageResponse response = messageService.sendMessage(request, userEmail);
         return CommonResponse.onSuccess(response);
     }
 
@@ -56,13 +58,12 @@ public class MessageController {
         return CommonResponse.onSuccess(null);
     }
 
-    @Operation(summary = "Save a temporary message")
     @PostMapping("/temp")
-    public CommonResponse<TempMessageResponse> saveTempMessage(
+    public CommonResponse<MessageResponseDto.TempMessageResponse> saveTempMessage(
             @AuthenticationPrincipal UserDetails authenticatedPrincipal,
-            @Valid @RequestBody TempMessageRequest request) {
+            @Valid @RequestBody MessageRequestDto.TempMessageRequest request) {
         String userEmail = authenticatedPrincipal.getUsername();
-        TempMessageResponse response = messageService.saveTempMessage(request, userEmail);
+        MessageResponseDto.TempMessageResponse response = messageService.saveTempMessage(request, userEmail);
         return CommonResponse.onSuccess(response);
     }
 }

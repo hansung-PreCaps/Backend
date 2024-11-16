@@ -63,6 +63,9 @@ public class Message extends BaseEntity {
     @Builder.Default
     private boolean deleted = false;
 
+    @Column(name = "external_message_id")
+    private String externalMessageId;
+
     public void addReceivers(List<Receiver> newReceivers) {
         this.receivers.addAll(newReceivers);
         newReceivers.forEach(receiver -> receiver.associateWithMessage(this));
@@ -81,5 +84,10 @@ public class Message extends BaseEntity {
 
     public void softDelete() {
         this.deleted = true;
+    }
+
+    public Message withExternalMessageId(String externalMessageId) {
+        this.externalMessageId = externalMessageId;
+        return this;
     }
 }

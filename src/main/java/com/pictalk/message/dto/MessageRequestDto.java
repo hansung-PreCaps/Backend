@@ -22,10 +22,10 @@ public class MessageRequestDto {
         private int targetCount;
         private List<Target> targets;
         private String refKey;
-        private String rejectType;
-        private String sendTime;
-        private String subject;
-        private List<FileDto> files;
+//        private String rejectType;
+//        private String sendTime;
+//        private String subject;
+//        private List<FileDto> files;
     }
 
     @Getter
