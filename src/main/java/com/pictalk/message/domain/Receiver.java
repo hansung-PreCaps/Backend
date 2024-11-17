@@ -1,12 +1,24 @@
 package com.pictalk.message.domain;
 
+import com.pictalk.global.common.BaseEntity;
 import com.pictalk.group.domain.GroupReceiver;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "receiver")
@@ -14,7 +26,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Receiver {
+public class Receiver extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +34,7 @@ public class Receiver {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "message_id", nullable = false)
+    @JoinColumn(name = "message_id")
     private Message message;
 
     @OneToMany(mappedBy = "receiver")
@@ -34,14 +46,10 @@ public class Receiver {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Builder.Default
-    private boolean deleted = false;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
+    @Builder
+    public Receiver(String nickname, String phoneNumber) {
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
     }
+
 }
