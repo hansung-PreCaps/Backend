@@ -6,8 +6,13 @@ import com.pictalk.message.domain.Message;
 import com.pictalk.message.domain.MessageStatus;
 import com.pictalk.message.domain.Receiver;
 import com.pictalk.message.domain.Sender;
-import com.pictalk.message.dto.MessageRequestDto.*;
-import com.pictalk.message.dto.MessageResponseDto.*;
+import com.pictalk.message.dto.MessageRequestDto;
+import com.pictalk.message.dto.MessageRequestDto.TempMessageRequest;
+import com.pictalk.message.dto.MessageRequestDto.SendMessageRequest;
+import com.pictalk.message.dto.MessageResponseDto.CancelMessageResponse;
+import com.pictalk.message.dto.MessageResponseDto.MessageResponse;
+import com.pictalk.message.dto.MessageResponseDto.SendMessageResponse;
+import com.pictalk.message.dto.MessageResponseDto.TempMessageResponse;
 import com.pictalk.message.repository.MessageRepository;
 import com.pictalk.message.repository.ReceiverRepository;
 import com.pictalk.message.repository.SenderRepository;
@@ -20,7 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 public class MessageService {
@@ -71,7 +80,7 @@ public class MessageService {
                 .build();
 
         // 3. 수신자 정보 추가
-        for (Target target : request.getTargets()) {
+        for (MessageRequestDto.Target target : request.getTargets()) {
             Receiver receiver = Receiver.builder()
                     .phoneNumber(target.getTo())
                     .nickname(target.getName())
@@ -154,7 +163,7 @@ public class MessageService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         Message tempMessage = Message.builder()
-                .sender(user.getSenders().get(0))  // Assuming the user has at least one sender
+                .sender(user.getSenders().get(0))
                 .content(request.getContent())
                 .status(MessageStatus.TEMP)
                 .createdAt(LocalDateTime.now())
@@ -174,24 +183,19 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public List<MessageResponse> getMessages(String userEmail) {
+    public List<Message> getMessages(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         List<Message> messages = messageRepository.findAllByDeletedFalseAndSenderUser(user);
-        List<MessageResponse> responses = new ArrayList<>();
 
-        for (Message message : messages) {
-            responses.add(MessageResponse.builder()
-                    .messageId(message.getId())
-                    .content(message.getContent())
-                    .to(message.getReceivers().get(0).getPhoneNumber())  // Assuming single receiver
-                    .sendTime(message.getSentAt() != null ? message.getSentAt().toString() : null)
-                    .status(message.getStatus().toString())
-                    .build());
-        }
+        return messages;
+    }
 
-        return responses;
+    public static String getReceiversAsString(List<Receiver> receivers) {
+        return receivers.stream()
+                .map(Receiver::getPhoneNumber)
+                .collect(Collectors.joining(", "));
     }
 
     @Transactional(readOnly = true)
@@ -208,6 +212,9 @@ public class MessageService {
                 .to(message.getReceivers().get(0).getPhoneNumber())  // Assuming single receiver
                 .sendTime(message.getSentAt() != null ? message.getSentAt().toString() : null)
                 .status(message.getStatus().toString())
+                .messageImages(message.getMessageImages().stream()
+                        .map(messageImage -> messageImage.getImage().getImageUrl())
+                        .collect(Collectors.toList()))
                 .build();
     }
 

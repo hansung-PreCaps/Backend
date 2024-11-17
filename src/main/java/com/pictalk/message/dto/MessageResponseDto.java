@@ -1,5 +1,6 @@
 package com.pictalk.message.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class MessageResponseDto {
         private String to;
         private String sendTime;
         private String status;
+        private List<String> messageImages;
     }
 
     @Getter
