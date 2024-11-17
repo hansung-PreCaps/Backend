@@ -39,10 +39,13 @@ public enum ErrorStatus implements BaseStatus {
     // Message Error
     MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "MESSAGE_2001", "메시지를 찾을 수 없습니다."),
     FILE_CONVERT_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_500", "파일 변환에 실패했습니다."),
+
     NOT_SUPPORTED_IMAGE_TYPE(HttpStatus.INTERNAL_SERVER_ERROR, "IMAGE_500", "지원하지 않는 이미지 타입입니다."),
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_404", "해당 그룹을 찾을 수 없습니다"),
     RECEIVER_NOT_FOUND(HttpStatus.NOT_FOUND, "RECEIVER_404", "해당 수신자를 찾을 수 없습니다"),
-    GROUP_RECEIVER_ALREADY_EXISTS(HttpStatus.CONFLICT, "GROUP_409", "그룹에 해당 수신자가 이미 존재합니다");
+    GROUP_RECEIVER_ALREADY_EXISTS(HttpStatus.CONFLICT, "GROUP_409", "그룹에 해당 수신자가 이미 존재합니다"),
+  ;
+
 
     private final HttpStatus httpStatus;
     private final String code;
