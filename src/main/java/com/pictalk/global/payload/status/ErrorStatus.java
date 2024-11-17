@@ -39,8 +39,7 @@ public enum ErrorStatus implements BaseStatus {
     // Message Error
     MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "MESSAGE_2001", "메시지를 찾을 수 없습니다."),
     FILE_CONVERT_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_500", "파일 변환에 실패했습니다."),
-    NOT_SUPPORTED_IMAGE_TYPE(HttpStatus.INTERNAL_SERVER_ERROR, "IMAGE_500", "지원하지 않는 이미지 타입입니다."),
-    ;
+    NOT_SUPPORTED_IMAGE_TYPE(HttpStatus.INTERNAL_SERVER_ERROR, "IMAGE_500", "지원하지 않는 이미지 타입입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

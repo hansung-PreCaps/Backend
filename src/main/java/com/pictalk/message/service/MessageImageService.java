@@ -8,6 +8,7 @@ import com.pictalk.message.domain.Message;
 import com.pictalk.message.domain.MessageImage;
 import com.pictalk.message.repository.MessageImageRepository;
 import com.pictalk.message.repository.MessageRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,4 +36,12 @@ public class MessageImageService {
         messageImageRepository.findAllByMessage(message);
     }
 
+    @Transactional(readOnly = true)
+    public List<MessageImage> getImage(Long messageId) {
+        final Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MESSAGE_NOT_FOUND));
+        message.getMessageImages();
+        List<MessageImage> messageImages = messageImageRepository.findAllByMessage(message);
+        return messageImages;
+    }
 }
