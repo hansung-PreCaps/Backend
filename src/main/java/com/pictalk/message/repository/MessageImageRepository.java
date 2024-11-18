@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MessageImageRepository extends JpaRepository<MessageImage, Long> {
     List<MessageImage> findAllByMessage(Message message);
 
+    MessageImage findByMessage(Message message);
 }

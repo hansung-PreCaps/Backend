@@ -8,6 +8,12 @@ import com.pictalk.message.domain.Receiver;
 import com.pictalk.message.domain.Sender;
 import com.pictalk.message.dto.MessageRequestDto.*;
 import com.pictalk.message.dto.MessageResponseDto.*;
+import com.pictalk.message.domain.Message;
+import com.pictalk.message.domain.Receiver;
+import com.pictalk.message.dto.MessageRequestDto.SendMessageRequest;
+import com.pictalk.message.dto.MessageResponseDto.CancelMessageResponse;
+import com.pictalk.message.dto.MessageResponseDto.MessageResponse;
+import com.pictalk.message.dto.MessageResponseDto.SendMessageResponse;
 import com.pictalk.message.repository.MessageRepository;
 import com.pictalk.message.repository.ReceiverRepository;
 import com.pictalk.message.repository.SenderRepository;
@@ -21,8 +27,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class MessageService {
 
     @Value("${ppurio.api.url}")
@@ -39,16 +51,6 @@ public class MessageService {
     private final SenderRepository senderRepository;
     private final ReceiverRepository receiverRepository;
     private final UserRepository userRepository;
-
-    public MessageService(RestTemplate restTemplate, MessageRepository messageRepository,
-                          SenderRepository senderRepository, ReceiverRepository receiverRepository,
-                          UserRepository userRepository) {
-        this.restTemplate = restTemplate;
-        this.messageRepository = messageRepository;
-        this.senderRepository = senderRepository;
-        this.receiverRepository = receiverRepository;
-        this.userRepository = userRepository;
-    }
 
     @Transactional
     public SendMessageResponse sendMessage(SendMessageRequest request, String userEmail) {
@@ -190,8 +192,13 @@ public class MessageService {
                     .status(message.getStatus().toString())
                     .build());
         }
-
         return responses;
+    }
+
+    private String getReceiversAsString(List<Receiver> receivers) {
+        return receivers.stream()
+                .map(Receiver::getPhoneNumber)
+                .collect(Collectors.joining(", "));
     }
 
     @Transactional(readOnly = true)
@@ -205,9 +212,12 @@ public class MessageService {
         return MessageResponse.builder()
                 .messageId(message.getId())
                 .content(message.getContent())
-                .to(message.getReceivers().get(0).getPhoneNumber())  // Assuming single receiver
+                .to(getReceiversAsString(message.getReceivers()))
                 .sendTime(message.getSentAt() != null ? message.getSentAt().toString() : null)
                 .status(message.getStatus().toString())
+                .messageImages(message.getMessageImages().stream()
+                        .map(messageImage -> messageImage.getImage().getImageUrl())
+                        .collect(Collectors.toList()))
                 .build();
     }
 
