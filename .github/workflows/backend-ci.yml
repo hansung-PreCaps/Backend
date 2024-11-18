@@ -1,4 +1,4 @@
-name: CI
+name: PicTalk dev CI
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - name: Set up JDK 17 (Amazon Corretto)
         uses: actions/setup-java@v4
         with:
-#          distribution: 'corretto'        # 올바른 배포판 이름
+          #          distribution: 'corretto'        # 올바른 배포판 이름
           distribution: 'temurin'
           java-version: '17'
 
