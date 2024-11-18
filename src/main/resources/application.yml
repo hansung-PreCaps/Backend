@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
@@ -55,3 +55,9 @@ cloud:
       static: ${AWS_S3_REGION}
     stack:
       auto: false
+
+ppurio:
+  api:
+    url: ${PPURIO_API_URL}
+    key: ${PPURIO_API_KEY}
+    account: ${PPURIO_API_ACCOUNT}

@@ -52,17 +52,19 @@ public class Message extends BaseEntity {
 
     private String content;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
     private LocalDateTime sentAt;
 
-    @Builder.Default
-    private boolean deleted = false;
+    @Column(name = "external_message_id")
+    private String externalMessageId;
 
-    public void addReceivers(List<Receiver> receivers) {
-        this.receivers.addAll(receivers);
+    public void addReceivers(List<Receiver> newReceivers) {
+        this.receivers.addAll(newReceivers);
+        newReceivers.forEach(receiver -> receiver.associateWithMessage(this));
+    }
+
+    public void addReceiver(Receiver receiver) {
+        this.receivers.add(receiver);
+        receiver.associateWithMessage(this);
     }
 
     public void cancel() {
@@ -71,7 +73,8 @@ public class Message extends BaseEntity {
         }
     }
 
-    public void softDelete() {
-        this.deleted = true;
+    public Message withExternalMessageId(String externalMessageId) {
+        this.externalMessageId = externalMessageId;
+        return this;
     }
 }

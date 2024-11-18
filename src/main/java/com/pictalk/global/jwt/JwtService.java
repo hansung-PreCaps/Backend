@@ -69,7 +69,7 @@ public class JwtService {
                 .compact();
     }
 
-//  saveAndFlush 사용으로  @Transactional은 없어도 될 듯
+    //  saveAndFlush 사용으로  @Transactional은 없어도 될 듯
     public String reIssueRefreshToken(User user) {
         String reIssuedRefreshToken = createRefreshToken();
         user.updateRefreshToken(reIssuedRefreshToken);

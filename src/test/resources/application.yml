@@ -52,3 +52,10 @@ cloud:
       static: MockAWSS3Region
     stack:
       auto: false
+
+
+ppurio:
+  api:
+    url: MockPPURIOUrl
+    key: MockPPURIOKey
+    account: MockPPURIOAccount

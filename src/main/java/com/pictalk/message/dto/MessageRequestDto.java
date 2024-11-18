@@ -22,10 +22,10 @@ public class MessageRequestDto {
         private int targetCount;
         private List<Target> targets;
         private String refKey;
-        private String rejectType;
-        private String sendTime;
-        private String subject;
-        private List<FileDto> files;
+//        private String rejectType;
+//        private String sendTime;
+//        private String subject;
+//        private List<FileDto> files;
     }
 
     @Getter
@@ -60,6 +60,13 @@ public class MessageRequestDto {
         private String name;
         private int size;
         private String data;
+    }
+
+    @Getter
+    public static class TempMessageRequest {
+        private String content;
+        private String to;
+        private String sendTime;
     }
 
     @Getter

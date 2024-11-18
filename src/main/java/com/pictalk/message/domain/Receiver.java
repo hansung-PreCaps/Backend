@@ -52,4 +52,7 @@ public class Receiver extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
+    public void associateWithMessage(Message message) {
+        this.message = message;
+    }
 }
