@@ -1,4 +1,4 @@
-name: UMC Dev CI/CD # workflow 이름
+name: PicTalk dev CD # workflow 이름
 
 on: # 이벤트 설정
   pull_request:
