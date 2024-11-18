@@ -14,11 +14,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,14 +52,7 @@ public class Message extends BaseEntity {
 
     private String content;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
     private LocalDateTime sentAt;
-
-    @Builder.Default
-    private boolean deleted = false;
 
     @Column(name = "external_message_id")
     private String externalMessageId;
@@ -80,10 +71,6 @@ public class Message extends BaseEntity {
         if (this.status == MessageStatus.SCHEDULED) {
             this.status = MessageStatus.CANCELLED;
         }
-    }
-
-    public void softDelete() {
-        this.deleted = true;
     }
 
     public Message withExternalMessageId(String externalMessageId) {
