@@ -34,6 +34,7 @@ public class CorsConfig {
     private List<String> getAllowOriginPatterns() {
         List<String> allowOriginPatterns = new ArrayList<>();
         allowOriginPatterns.add(domain);
+        allowOriginPatterns.add("https://enble.site");
         allowOriginPatterns.add("http://localhost:5173");
         return allowOriginPatterns;
     }
