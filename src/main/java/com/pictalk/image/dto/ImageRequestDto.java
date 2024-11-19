@@ -1,4 +1,4 @@
-package com.pictalk.aiimage.dto;
+package com.pictalk.image.dto;
 
 import lombok.Getter;
 
