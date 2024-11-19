@@ -2,6 +2,7 @@ package com.pictalk.image.controller;
 
 
 import com.pictalk.global.payload.response.CommonResponse;
+import com.pictalk.global.payload.status.SuccessStatus;
 import com.pictalk.image.dto.ImageRequestDto;
 import com.pictalk.image.dto.ImageResponseDto;
 import com.pictalk.image.service.AiImageService;
@@ -24,7 +25,7 @@ public class AiImageController {
     @PostMapping
     public CommonResponse<ImageResponseDto.ImageResponse> createAIImage(@Valid @RequestBody ImageRequestDto.CreateAiImageRequest imageRequest) {
         ImageResponseDto.ImageResponse imageResponse = aiImageService.createAiImage(imageRequest);
-        return CommonResponse.onSuccess(imageResponse);
+        return CommonResponse.of(SuccessStatus.CREATED, imageResponse);
     }
 
 }
