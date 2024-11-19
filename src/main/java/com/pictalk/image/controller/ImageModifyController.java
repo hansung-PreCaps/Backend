@@ -4,6 +4,7 @@ import com.pictalk.infra.PhotoRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,8 @@ public class ImageModifyController {
             byte[] editedImage = photoroomService.editImageWithUrl(imageUrl);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Type", "image/png");
+            headers.setContentType(MediaType.IMAGE_PNG);
+//            headers.setContentLength(editedImage.length);
 
             return new ResponseEntity<>(editedImage, headers, HttpStatus.OK);
         } catch (Exception e) {
