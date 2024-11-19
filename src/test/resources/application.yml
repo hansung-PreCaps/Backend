@@ -59,3 +59,12 @@ ppurio:
     url: MockPPURIOUrl
     key: MockPPURIOKey
     account: MockPPURIOAccount
+
+photoroom:
+  api:
+    key: MockPhotoroomKey
+    url: MockPhotoroomUrl
+
+sandbox:
+  api:
+    key: MockSandboxKey

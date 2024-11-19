@@ -62,8 +62,12 @@ ppurio:
     key: ${PPURIO_API_KEY}
     account: ${PPURIO_API_ACCOUNT}
 
-snapedit:
+
+photoroom:
   api:
-    key: ${SNAPEDIT_API_KEY}
-    object-removal-url: ${SNAPEDIT_OBJECT_REMOVAL_URL}
-    background-removal-url: ${SNAPEDIT_BACKGROUND_REMOVAL_URL}
+    key: ${PHOTOROOM_API_KEY}
+    url: ${PHOTOROOM_API_URL}
+
+sandbox:
+  api:
+    key: ${SANDBOX_API_KEY}
