@@ -61,3 +61,9 @@ ppurio:
     url: ${PPURIO_API_URL}
     key: ${PPURIO_API_KEY}
     account: ${PPURIO_API_ACCOUNT}
+
+snapedit:
+  api:
+    key: ${SNAPEDIT_API_KEY}
+    object-removal-url: ${SNAPEDIT_OBJECT_REMOVAL_URL}
+    background-removal-url: ${SNAPEDIT_BACKGROUND_REMOVAL_URL}
