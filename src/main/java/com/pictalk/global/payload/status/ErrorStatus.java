@@ -44,7 +44,11 @@ public enum ErrorStatus implements BaseStatus {
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_404", "해당 그룹을 찾을 수 없습니다"),
     RECEIVER_NOT_FOUND(HttpStatus.NOT_FOUND, "RECEIVER_404", "해당 수신자를 찾을 수 없습니다"),
     GROUP_RECEIVER_ALREADY_EXISTS(HttpStatus.CONFLICT, "GROUP_409", "그룹에 해당 수신자가 이미 존재합니다"),
-  ;
+    FAILED_TO_DETECT_OBJECT(HttpStatus.BAD_GATEWAY, "SNAP_502", "SnapEdit에서 객체 검출을 실패하였습니다"),
+    FILE_CONVERSION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_500", "파일 변환에 실패하였습니다"),
+    NO_TEXT_FOUND(HttpStatus.NOT_FOUND, "TEXT_404", ""),
+
+    PHOTOROOM_API_ERROR(HttpStatus.BAD_GATEWAY, "PR_502", "PhotoRoom Server Error");
 
 
     private final HttpStatus httpStatus;
