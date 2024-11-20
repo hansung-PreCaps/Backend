@@ -9,4 +9,9 @@ public class ImageRequestDto {
         private String situation;
         private String atmosphere;
     }
+
+    @Getter
+    public static class EditImageRequest {
+        private String imageUrl;
+    }
 }
