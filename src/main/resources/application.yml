@@ -61,3 +61,13 @@ ppurio:
     url: ${PPURIO_API_URL}
     key: ${PPURIO_API_KEY}
     account: ${PPURIO_API_ACCOUNT}
+
+
+photoroom:
+  api:
+    key: ${PHOTOROOM_API_KEY}
+    url: ${PHOTOROOM_API_URL}
+
+sandbox:
+  api:
+    key: ${SANDBOX_API_KEY}

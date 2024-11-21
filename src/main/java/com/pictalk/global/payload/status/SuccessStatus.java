@@ -21,8 +21,9 @@ public enum SuccessStatus implements BaseStatus {
     GROUP_UPDATED(HttpStatus.OK, "GROUP_200", "그룹 이름 변경이 성공적으로 처리되었습니다."),
     GROUP_RECEIVER_ADDED(HttpStatus.CREATED, "GR_RC_201", "그룹 멤버 추가가 성공적으로 처리되었습니다."),
     GROUP_RECEIVERS_FOUND(HttpStatus.OK, "GR_RC_200", "그룹 멤버가 성공적으로 조회되었습니다."),
-    GROUP_RECEIVER_DELETED(HttpStatus.NO_CONTENT, "GR_RC_204", "그룹 멤버 삭제가 성공적으로 처리되었습니다.")
-    ;
+    GROUP_RECEIVER_DELETED(HttpStatus.NO_CONTENT, "GR_RC_204", "그룹 멤버 삭제가 성공적으로 처리되었습니다."),
+    REMOVE_TEXT_SUCCESS(HttpStatus.OK, "RT_200", "이미지 내 텍스트가 성공적으로 삭제되었습니다"),
+    REMOVE_BACKGROUND_SUCCESS(HttpStatus.OK, "RB_200", "이미지 내 배경이 성공적으로 삭제되었습니다");
 
     private final HttpStatus httpStatus;
     private final String code;

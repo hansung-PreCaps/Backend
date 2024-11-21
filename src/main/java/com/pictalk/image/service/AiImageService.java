@@ -1,8 +1,8 @@
-package com.pictalk.aiimage.service;
+package com.pictalk.image.service;
 
-import com.pictalk.aiimage.dto.ImageRequestDto;
-import com.pictalk.aiimage.dto.ImageResponseDto;
 import com.pictalk.global.component.OpenAIImageClient;
+import com.pictalk.image.dto.ImageRequestDto;
+import com.pictalk.image.dto.ImageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
