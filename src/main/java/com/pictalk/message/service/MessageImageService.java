@@ -1,7 +1,5 @@
 package com.pictalk.message.service;
 
-import com.pictalk.global.exception.GeneralException;
-import com.pictalk.global.payload.status.ErrorStatus;
 import com.pictalk.global.vo.Image;
 import com.pictalk.infra.S3Uploader;
 import com.pictalk.message.domain.Message;
@@ -22,10 +20,15 @@ public class MessageImageService {
     private final MessageRepository messageRepository;
 
     @Transactional
-    public void createImage(Long messageId, MultipartFile imageFile) {
-        final Message message = messageRepository.findById(messageId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.MESSAGE_NOT_FOUND));
-        final Image image = uploader.uploadImage(imageFile, "images");
+    public void createFiletoImage(Message message, MultipartFile imageFile) {
+        final Image image = uploader.uploadImage(imageFile);
+        MessageImage messageImage = new MessageImage(message, image);
+        messageImageRepository.save(messageImage);
+        message.getMessageImages().add(messageImage);
+    }
+
+    @Transactional
+    public void createImage(Message message, Image image) {
         MessageImage messageImage = new MessageImage(message, image);
         messageImageRepository.save(messageImage);
         message.getMessageImages().add(messageImage);
@@ -37,11 +40,14 @@ public class MessageImageService {
     }
 
     @Transactional(readOnly = true)
-    public List<MessageImage> getImage(Long messageId) {
-        final Message message = messageRepository.findById(messageId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.MESSAGE_NOT_FOUND));
+    public List<MessageImage> getImage(Message message) {
         message.getMessageImages();
         List<MessageImage> messageImages = messageImageRepository.findAllByMessage(message);
         return messageImages;
+    }
+
+    @Transactional
+    public void deleteImage(MessageImage messageImage) {
+        messageImageRepository.delete(messageImage);
     }
 }

@@ -13,6 +13,7 @@ import com.pictalk.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -120,5 +121,11 @@ public class UserService {
         String newRefreshToken = jwtService.reIssueRefreshToken(user);
         // 클라이언트에는 새 액세스 토큰만 반환
         return UserConverter.toLoginResponse(newAccessToken, newRefreshToken);
+    }
+
+    public User getLoginUser(UserDetails authenticatedPrincipal) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        return userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
     }
 }

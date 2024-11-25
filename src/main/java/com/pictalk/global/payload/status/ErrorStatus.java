@@ -14,6 +14,8 @@ public enum ErrorStatus implements BaseStatus {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON_401", "인증이 필요합니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_403", "금지된 요청입니다."),
 
+    INVALID_REQUEST(HttpStatus.BAD_REQUEST, "M_400", "잘못된 메시지 요청입니다"),
+
     // User Error
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "사용자를 찾을 수 없습니다."),
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_409", "이미 존재하는 사용자입니다."),
@@ -48,7 +50,8 @@ public enum ErrorStatus implements BaseStatus {
     FILE_CONVERSION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_500", "파일 변환에 실패하였습니다"),
     NO_TEXT_FOUND(HttpStatus.NOT_FOUND, "TEXT_404", ""),
 
-    PHOTOROOM_API_ERROR(HttpStatus.BAD_GATEWAY, "PR_502", "PhotoRoom Server Error");
+    PHOTOROOM_API_ERROR(HttpStatus.BAD_GATEWAY, "PR_502", "PhotoRoom Server Error"),
+    FILE_READ_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_500", "파일을 읽는 것에 실패했습니다.");
 
 
     private final HttpStatus httpStatus;
