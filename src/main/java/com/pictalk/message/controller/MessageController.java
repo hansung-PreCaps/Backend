@@ -47,7 +47,7 @@ public class MessageController {
     public CommonResponse<SendMessageResponse> sendMMS(
             @AuthenticationPrincipal UserDetails authenticatedPrincipal,
             @RequestPart(name = "request") @Valid SendMessageRequest request,
-            @RequestPart(name = "image") MultipartFile image) {
+            @RequestPart(name = "image", required = false) MultipartFile image) {
 
         User user = userService.getLoginUser(authenticatedPrincipal);
         MessageResponseDto.SendMessageResponse response = sendMessageFacade.sendMessage(request, user, image);
