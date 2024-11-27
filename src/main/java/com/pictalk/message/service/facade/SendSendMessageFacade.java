@@ -42,6 +42,7 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
     private final S3Uploader s3Uploader;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public SendMessageResponse sendMessage(Object request, User user, MultipartFile image) {
         if (request instanceof SendMessageRequest) {
             // MMS 로직
@@ -56,7 +57,7 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
     }
 
     // MMS 로직
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public SendMessageResponse processMms(SendMessageRequest request, User user, MultipartFile image) {
         // 발신자 찾기 -> 없으면 새로 생성
         Sender sender = senderService.findOrCreateSender(request.getFrom(), user);
@@ -101,7 +102,6 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
         String messageKey = (String) messageResponse.getBody().get("messageKey");
 
         message.addMessageKey(messageKey);
-        messageServiceImpl.saveMessage(message);
 //        messageImageService.createFiletoImage(message, image);
 
         return SendMessageResponse
