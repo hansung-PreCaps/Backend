@@ -25,5 +25,4 @@ public class GroupRequestDto {
         private String nickname;
         private String phoneNumber;
     }
-
 }

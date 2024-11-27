@@ -5,6 +5,7 @@ import com.pictalk.global.payload.status.SuccessStatus;
 import com.pictalk.group.domain.Group;
 import com.pictalk.group.dto.GroupRequestDto.CreateGroupRequest;
 import com.pictalk.group.dto.GroupRequestDto.UpdateGroupRequest;
+import com.pictalk.group.dto.GroupResponseDto.CreateGroupResponse;
 import com.pictalk.group.service.GroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,10 @@ public class GroupController {
                                               @RequestBody CreateGroupRequest createGroupRequest) {
         String userEmail = authenticatedPrincipal.getUsername();
         Group group = groupService.createGroup(createGroupRequest, userEmail);
-        return CommonResponse.of(SuccessStatus.GROUP_CREATED, null);
+
+        return CommonResponse.of(SuccessStatus.GROUP_CREATED, CreateGroupResponse.builder()
+                .groupId(group.getId())
+                .build());
     }
 
     @Operation(summary = "그룹 삭제")
@@ -47,5 +51,4 @@ public class GroupController {
         groupService.updateGroup(groupId, updateGroupRequest);
         return CommonResponse.of(SuccessStatus.GROUP_UPDATED, null);
     }
-
 }
