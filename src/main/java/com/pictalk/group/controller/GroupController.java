@@ -5,19 +5,17 @@ import com.pictalk.global.payload.status.SuccessStatus;
 import com.pictalk.group.domain.Group;
 import com.pictalk.group.dto.GroupRequestDto.CreateGroupRequest;
 import com.pictalk.group.dto.GroupRequestDto.UpdateGroupRequest;
+import com.pictalk.group.dto.GroupResponseDto;
 import com.pictalk.group.dto.GroupResponseDto.CreateGroupResponse;
 import com.pictalk.group.service.GroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +48,21 @@ public class GroupController {
                                               @RequestBody UpdateGroupRequest updateGroupRequest) {
         groupService.updateGroup(groupId, updateGroupRequest);
         return CommonResponse.of(SuccessStatus.GROUP_UPDATED, null);
+    }
+
+    @Operation(summary = "그룹 조회")
+    @GetMapping
+    public CommonResponse<List<GroupResponseDto.SearchGroupResponse>> getGroups(@AuthenticationPrincipal UserDetails authenticatedPrincipal) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        List<Group> groups = groupService.getAllGroupsByUser(userEmail);
+
+        List<GroupResponseDto.SearchGroupResponse> response = groups.stream()
+                .map(group -> GroupResponseDto.SearchGroupResponse.builder()
+                        .groupId(group.getId())
+                        .groupName(group.getName())
+                        .build())
+                .collect(Collectors.toList());
+
+        return CommonResponse.of(SuccessStatus.GROUPS_FOUND, response);
     }
 }
