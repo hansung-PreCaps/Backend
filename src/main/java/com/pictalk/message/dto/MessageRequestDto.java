@@ -1,7 +1,10 @@
 package com.pictalk.message.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.pictalk.message.domain.MessageStatus;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,15 +20,15 @@ public class MessageRequestDto {
         private String content;
         private String from;
         private String subject;
-        private String rejectType;
+        private String rejectType = "AD";
     }
 
     @Getter
     public static class SendKakaoRequest extends BaseMessageDto {
         private String senderProfile;
         private String templateCode;
-        private String isResend;
-        private List<Resend> resends;
+        private String isResend = "Y";
+        private List<ResendDto> resends;
     }
 
     @Getter
@@ -35,16 +38,27 @@ public class MessageRequestDto {
         private int targetCount;
         private List<Target> targets;
         private String sendTime;
+        private String messageType;
     }
 
     @Getter
-    @Builder
-    public static class Resend {
+    public static class ResendDto {
         private String messageType = "ALT";
         private String content;
         private String from;
         private String subject;
-        private List<ResendFile> files;
+
+    }
+
+    @Getter
+    @Builder
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class Resend {
+        private String messageType;
+        private String content;
+        private String from;
+        private String subject;
+        private FileDto[] files;
 
         // Getter and Setter
 
@@ -52,7 +66,7 @@ public class MessageRequestDto {
         @Builder
         public static class ResendFile {
             private String fileKey;
-            private String fileName;
+            private String name;
             private String fileType;
             private String fileUrl;
             // Getter and Setter
@@ -66,7 +80,7 @@ public class MessageRequestDto {
     @AllArgsConstructor
     public static class Target {
         private String to;
-        private ChangeWord changeWord;
+        private Map<String,String> changeWord;
         private String name;
     }
 

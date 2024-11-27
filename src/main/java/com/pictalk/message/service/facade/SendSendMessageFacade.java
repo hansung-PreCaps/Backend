@@ -21,6 +21,7 @@ import com.pictalk.message.service.MessageServiceImpl;
 import com.pictalk.message.service.ReceiverService;
 import com.pictalk.message.service.SenderService;
 import com.pictalk.user.domain.User;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,15 +82,25 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
 //        List<FileDto> files = images.stream()
 //                .map(ImageUtil::convertMultipartFileToFileDto)
 //                .collect(Collectors.toList());
-        FileDto file = ImageUtil.convertMultipartFileToFileDto(image);
+        List<FileDto> file = new ArrayList<>();
+
+        if(image == null) {
+            file = null;
+        }
+        else {
+            file.add(ImageUtil.convertMultipartFileToFileDto(image));
+            messageServiceImpl.saveMessage(message);
+            messageImageService.createFiletoImage(message, image);
+        }
 
         // 5. 뿌리오 메시지 전송
-        ResponseEntity<Map> messageResponse = ppurioService.sendMMS((List<FileDto>) file, sender, user.getPpurioAccessToken(), request);
+        ResponseEntity<Map> messageResponse = ppurioService.sendMMS(file, sender,
+                user.getPpurioAccessToken(), request);
 
         String messageKey = (String) messageResponse.getBody().get("messageKey");
 
-        messageServiceImpl.saveMessage(message, messageKey);
-        messageImageService.createFiletoImage(message, image);
+        message.addMessageKey(messageKey);
+//        messageImageService.createFiletoImage(message, image);
 
         return SendMessageResponse
                 .builder()
@@ -101,7 +112,7 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
 
     // Kakao 로직
     @Transactional
-    public SendMessageResponse processKakao(SendKakaoRequest request, User user, MultipartFile multipartFile) {
+    public SendMessageResponse processKakao(SendKakaoRequest request, User user, MultipartFile image) {
 
         // 발신자 찾기 -> 없으면 새로 생성
         Sender sender = senderService.findOrCreateSender("Kakao", user);
@@ -111,7 +122,7 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
 
         Message message = Message.builder()
                 .sender(sender)
-                .content(request.getResends().get(0).getContent())
+                .content(request.getResends() == null ? "No content" : request.getResends().get(0).getContent())
                 .status(request.getStatus())
                 .build();
 
@@ -129,29 +140,56 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
 //                .map(s3Uploader::uploadImage) // uploadImage 메서드 호출
 //                .toList();
 
-        Image image = s3Uploader.uploadImage(multipartFile);
+
 //        List<ResendFile> files = images.stream()
 //                .map(ImageUtil::convertMultipartFileToResendFile)
 //                .toList();
+//        List<ResendFile> file;
+//
+//        if(multipartFile == null) {
+//            file = null;
+//        }
+//        else {
+//            file = new ArrayList<>();
+//            Image image = s3Uploader.uploadImage(multipartFile);
+//            file.add(ImageUtil.convertMultipartFileToResendFile(image));
+//            messageServiceImpl.saveMessage(message);
+//            messageImageService.createImage(message, image);
+//        }
+        List<FileDto> file;
 
-        ResendFile file = ImageUtil.convertMultipartFileToResendFile(image);
+        if(image == null) {
+            file = null;
+        }
+        else {
+            file = new ArrayList<>();
+            file.add(ImageUtil.convertMultipartFileToFileDto(image));
+            messageServiceImpl.saveMessage(message);
+            messageImageService.createFiletoImage(message, image);
+        }
 
-        List<Resend> resend = request.getResends().stream()
-                .map(existingResend -> Resend.builder()
-                        .content(existingResend.getContent()) // 기존 Resend의 content 사용
-                        .from(existingResend.getFrom()) // 요청에서 공통으로 가져온 from 값 사용
-                        .subject(existingResend.getSubject()) // 요청에서 subject 사용
-                        .files((List<ResendFile>) file) // 변환된 files 사용
-                        .build())
-                .collect(Collectors.toList());
+        List<Resend> resend;
+
+        if(request.getResends() == null) {
+            resend = null;
+        }
+        else{
+            resend = request.getResends().stream()
+                    .map(existingResend -> Resend.builder()
+                            .messageType(existingResend.getMessageType()) // 기존 Resend의 messageType 사용
+                            .content(existingResend.getContent()) // 기존 Resend의 content 사용
+                            .from(existingResend.getFrom()) // 요청에서 공통으로 가져온 from 값 사용
+                            .subject(existingResend.getSubject()) // 요청에서 subject 사용
+                            .files(file == null ? null : file.toArray(new FileDto[file.size()])) // 변환된 files 사용
+                            .build())
+                    .collect(Collectors.toList());
+        }
 
         ResponseEntity<Map> messageResponse = ppurioService.sendKakao(resend, sender, user.getPpurioAccessToken(), request);
 
         String messageKey = (String) messageResponse.getBody().get("messageKey");
 
-        messageServiceImpl.saveMessage(message, messageKey);
-
-        messageImageService.createImage(message, image);
+        message.addMessageKey(messageKey);
 
         return SendMessageResponse
                 .builder()

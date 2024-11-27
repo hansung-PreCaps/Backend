@@ -1,6 +1,7 @@
 package com.pictalk.message.repository;
 
 import com.pictalk.message.domain.Message;
+import com.pictalk.message.domain.MessageStatus;
 import com.pictalk.user.domain.User;
 import java.util.List;
 import java.util.Optional;
@@ -14,4 +15,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     // 삭제되지 않은 특정 사용자의 특정 메시지 조회
     Optional<Message> findByIdAndSenderUser(Long id, User user);
+
+    List<Message> findBySenderUserAndStatus(User user, MessageStatus messageStatus);
 }

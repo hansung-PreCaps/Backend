@@ -3,6 +3,7 @@ package com.pictalk.message.service;
 import com.pictalk.global.component.PpurioClient;
 import com.pictalk.global.exception.GeneralException;
 import com.pictalk.global.payload.status.ErrorStatus;
+import com.pictalk.infra.PpurioService;
 import com.pictalk.message.domain.Message;
 import com.pictalk.message.domain.MessageStatus;
 import com.pictalk.message.dto.MessageResponseDto.CancelMessageResponse;
@@ -27,23 +28,8 @@ public class MessageServiceImpl {
     private final ReceiverRepository receiverRepository;
     private final UserRepository userRepository;
     private final PpurioClient ppurioClient;
+    private final PpurioService ppurioService;
 
-//    @Transactional
-//    public TempMessageResponse saveTempMessage(TempMessageRequest request, String userEmail) {
-//        User user = userRepository.findByEmail(userEmail)
-//                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
-//
-//        Message tempMessage = Message.builder()
-//                .sender(user.getSenders().get(0))  // Assuming the user has at least one sender
-//                .content(request.getContent()).status(MessageStatus.TEMP).build();
-//
-//        Receiver receiver = Receiver.builder().phoneNumber(request.getTo()).build();
-//        tempMessage.addReceiver(receiver);
-//
-//        tempMessage = messageRepository.save(tempMessage);
-//
-//        return TempMessageResponse.builder().messageId(tempMessage.getId()).status("temp_saved").build();
-//    }
 
     @Transactional(readOnly = true)
     public List<Message> getMessages(String userEmail) {
@@ -75,6 +61,7 @@ public class MessageServiceImpl {
             throw new GeneralException(ErrorStatus.BAD_REQUEST);
         }
 
+        ppurioService.cancelMessage(user.getPpurioAccessToken(), message.getExternalMessageId());
         message.cancel();
         messageRepository.save(message);
 
@@ -94,8 +81,7 @@ public class MessageServiceImpl {
         messageRepository.save(message);
     }
 
-    public void saveMessage(Message message, String messageKey) {
-        message.withExternalMessageId(messageKey);
+    public void saveMessage(Message message) {
         messageRepository.save(message);
     }
 
@@ -103,4 +89,14 @@ public class MessageServiceImpl {
         return messageRepository.findById(messageId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MESSAGE_NOT_FOUND));
     }
+
+
+    public List<Message> getMessageByStatus(String userEmail, String status) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        return messageRepository.findBySenderUserAndStatus(user, MessageStatus.valueOf(status));
+    }
+
+
 }

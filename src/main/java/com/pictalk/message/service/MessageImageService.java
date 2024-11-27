@@ -19,19 +19,16 @@ public class MessageImageService {
     private final MessageImageRepository messageImageRepository;
     private final MessageRepository messageRepository;
 
-    @Transactional
+//    @Transactional
     public void createFiletoImage(Message message, MultipartFile imageFile) {
         final Image image = uploader.uploadImage(imageFile);
-        MessageImage messageImage = new MessageImage(message, image);
-        messageImageRepository.save(messageImage);
-        message.getMessageImages().add(messageImage);
+        createImage(message, image);
     }
 
-    @Transactional
     public void createImage(Message message, Image image) {
         MessageImage messageImage = new MessageImage(message, image);
         messageImageRepository.save(messageImage);
-        message.getMessageImages().add(messageImage);
+        message.add(messageImage);
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import com.pictalk.global.exception.GeneralException;
 import com.pictalk.global.jwt.JwtRequestFilter;
 import com.pictalk.global.jwt.JwtService;
 import com.pictalk.global.payload.status.ErrorStatus;
+import com.pictalk.infra.PpurioService;
 import com.pictalk.user.converter.UserConverter;
 import com.pictalk.user.domain.User;
 import com.pictalk.user.dto.UserRequestDto;
@@ -24,6 +25,7 @@ public class UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final JwtRequestFilter jwtRequestFilter;
+    private final PpurioService ppurioService;
 
     // 회원가입
     @Transactional
@@ -52,9 +54,11 @@ public class UserService {
 
         String accessToken = jwtService.createAccessToken(user.getEmail());
         String refreshToken = jwtService.createRefreshToken();
+        String ppurioToken = (String) ppurioService.getPpurioToken().getBody().get("token");
 
         // 리프레시 토큰 저장
         user.updateRefreshToken(refreshToken);
+        user.updatePpurioAccessToken(ppurioToken);
         return UserConverter.toLoginResponse(accessToken, refreshToken);
     }
 
@@ -94,6 +98,8 @@ public class UserService {
 
         // 새로운 액세스 토큰 생성
         String newAccessToken = jwtService.createAccessToken(user.getEmail());
+        String ppurioToken = (String) ppurioService.getPpurioToken().getBody().get("token");
+        user.updatePpurioAccessToken(ppurioToken);
 
         // 클라이언트에는 새 액세스 토큰만 반환
         return newAccessToken;
@@ -120,6 +126,10 @@ public class UserService {
         // 새로운 리프레시 토큰 생성
         String newRefreshToken = jwtService.reIssueRefreshToken(user);
         // 클라이언트에는 새 액세스 토큰만 반환
+
+        String ppurioToken = ppurioService.getPpurioToken().getBody().get("access_token").toString();
+        user.updatePpurioAccessToken(ppurioToken);
+
         return UserConverter.toLoginResponse(newAccessToken, newRefreshToken);
     }
 

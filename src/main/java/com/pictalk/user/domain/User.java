@@ -49,10 +49,14 @@ public class User extends BaseEntity {
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    @Column(name = "ppurio_access_token")
+    @Column(name = "ppurio_access_token", length = 1000)
     private String ppurioAccessToken;
 
     public void updateRefreshToken(String updateRefreshToken) {
         this.refreshToken = updateRefreshToken;
+    }
+
+    public void updatePpurioAccessToken(String updatePpurioAccessToken) {
+        this.ppurioAccessToken = updatePpurioAccessToken;
     }
 }

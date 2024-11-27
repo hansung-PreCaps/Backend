@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,26 +45,25 @@ public class MessageController {
     private final UserService userService;
 
     @PostMapping(value = "/sms", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CommonResponse<SendMessageResponse> sendMMS(
-            @AuthenticationPrincipal UserDetails authenticatedPrincipal,
-            @RequestPart(name = "request") @Valid SendMessageRequest request,
-            @RequestPart(name = "image", required = false) MultipartFile image) {
+    public CommonResponse<SendMessageResponse> sendMMS(@AuthenticationPrincipal UserDetails authenticatedPrincipal,
+                                                       @RequestPart(name = "request") @Valid SendMessageRequest request,
+                                                       @RequestPart(name = "image", required = false) MultipartFile image) {
 
         User user = userService.getLoginUser(authenticatedPrincipal);
         MessageResponseDto.SendMessageResponse response = sendMessageFacade.sendMessage(request, user, image);
         return CommonResponse.onSuccess(response);
     }
 
-    @PostMapping("/kakao")
+    @PostMapping(value="/kakao", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CommonResponse<MessageResponseDto.SendMessageResponse> sendKakao(@AuthenticationPrincipal UserDetails authenticatedPrincipal,
-                                                                            @Valid @RequestBody MessageRequestDto.SendKakaoRequest request,
-                                                                            MultipartFile image) {
+                                                                            @RequestPart(name = "request") @Valid MessageRequestDto.SendKakaoRequest request,
+                                                                            @RequestPart(name="image", required = false) MultipartFile image) {
         User user = userService.getLoginUser(authenticatedPrincipal);
         SendMessageResponse response = sendMessageFacade.sendMessage(request, user, image);
         return CommonResponse.onSuccess(response);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public CommonResponse<List<MessageResponse>> getMessages(
             @AuthenticationPrincipal UserDetails authenticatedPrincipal) {
         String userEmail = authenticatedPrincipal.getUsername();
@@ -107,6 +107,27 @@ public class MessageController {
         return CommonResponse.onSuccess(response);
     }
 
+    @GetMapping
+    public CommonResponse<List<MessageResponse>> getMessageByStatus(@AuthenticationPrincipal UserDetails authenticatedPrincipal,
+                                                              @RequestParam String status) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        List<Message> messages = messageServiceImpl.getMessageByStatus(userEmail, status);
+
+        List<MessageResponse> messageResponses = messages.stream().map(message -> MessageResponse.builder()
+                .messageId(message.getId())
+                .content(message.getContent())
+                .to(getReceiversAsString(message.getReceivers()))
+                .sendTime(message.getSentAt() != null ? message.getSentAt().toString() : null)
+                .messageImages(getImageUrls(message.getMessageImages()))
+                .status(message.getStatus().toString())
+                .build()
+        ).toList();
+
+        return CommonResponse.onSuccess(messageResponses);
+    }
+
+
+
     @PatchMapping("/{message_id}")
     public CommonResponse<CancelMessageResponse> cancelScheduledMessage(
             @AuthenticationPrincipal UserDetails authenticatedPrincipal,
@@ -124,18 +145,12 @@ public class MessageController {
         return CommonResponse.onSuccess(null);
     }
 
-//    @PostMapping("/temp")
-//    public CommonResponse<MessageResponseDto.TempMessageResponse> saveTempMessage(
-//            @AuthenticationPrincipal UserDetails authenticatedPrincipal,
-//            @Valid @RequestBody MessageRequestDto.TempMessageRequest request) {
-//        String userEmail = authenticatedPrincipal.getUsername();
-//        MessageResponseDto.TempMessageResponse response = messageServiceImpl.saveTempMessage(request, userEmail);
-//        return CommonResponse.onSuccess(response);
-//    }
 
     private String getReceiversAsString(List<Receiver> receivers) {
         return receivers.stream()
                 .map(Receiver::getPhoneNumber)
                 .collect(Collectors.joining(", "));
     }
+
+
 }

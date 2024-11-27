@@ -63,7 +63,7 @@ public class ImageUtil {
     public static ResendFile convertMultipartFileToResendFile(Image image) {
         return ResendFile.builder()
                 .fileKey(image.getImageUUID())
-                .fileName(image.getImageName())
+                .name(image.getImageName())
                 .fileType(image.getImageType().toString())
                 .fileUrl(image.getImageUrl())
                 .build();

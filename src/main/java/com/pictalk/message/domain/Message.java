@@ -22,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "message")
@@ -29,6 +30,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Where(clause = "deleted_at IS NULL")
 public class Message extends BaseEntity {
 
     @Id
@@ -44,7 +46,8 @@ public class Message extends BaseEntity {
     @Builder.Default
     private List<Receiver> receivers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "message")
+    @Builder.Default
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MessageImage> messageImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -76,5 +79,14 @@ public class Message extends BaseEntity {
     public Message withExternalMessageId(String externalMessageId) {
         this.externalMessageId = externalMessageId;
         return this;
+    }
+
+    public void addMessageKey(String messageKey) {
+        this.externalMessageId = messageKey;
+    }
+
+    public void add(MessageImage messageImage) {
+        this.messageImages.add(messageImage);
+        messageImage.add(this);
     }
 }
