@@ -40,8 +40,7 @@ public class GroupService {
         group.softDelete();
     }
 
-
-    public List<Group> getAllGroupByUser(String userEmail) {
+    public List<Group> getAllGroupsByUser(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         return groupRepository.findAllByUser(user);
