@@ -26,9 +26,9 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public Image uploadImage(MultipartFile multipartFile, String dirName) {
+    public Image uploadImage(MultipartFile multipartFile) {
         final Image image = ImageUtil.convertMultipartToImage(multipartFile);
-        final String filename = convertToFilename(dirName, image);
+        final String filename = convertToFilename("images", image);
         final String url = upload(multipartFile, filename);
         image.setUrl(url);
         return image;
@@ -57,12 +57,6 @@ public class S3Uploader {
         return dirName + "/" + UUID + "_" + name + "." + type;
     }
 
-
-    //    private String putS3(File uploadFile, String fileName) {
-//        amazonS3Client.putObject(
-//                new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
-//        return amazonS3Client.getUrl(bucket, fileName).toString();
-//    }
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile));
         return amazonS3Client.getUrl(bucket, fileName).toString();

@@ -2,9 +2,11 @@ package com.pictalk.message.controller;
 
 import com.pictalk.global.payload.response.CommonResponse;
 import com.pictalk.global.payload.status.SuccessStatus;
+import com.pictalk.message.domain.Message;
 import com.pictalk.message.domain.MessageImage;
 import com.pictalk.message.dto.ImageResponseDto;
 import com.pictalk.message.service.MessageImageService;
+import com.pictalk.message.service.MessageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/images")
 public class ImageController {
     private final MessageImageService messageImageService;
+    private final MessageServiceImpl messageServiceImpl;
 
     // 이미지 업로드
     @Operation(summary = "이미지 업로드")
@@ -33,14 +36,19 @@ public class ImageController {
     public CommonResponse<Object> uploadImage(@PathVariable("message_id") Long messageId,
                                               @RequestPart(name = "image_file")
                                               @Valid MultipartFile imageFile) {
-        messageImageService.createImage(messageId, imageFile);
+
+        Message message = messageServiceImpl.getMessageById(messageId);
+        messageImageService.createFiletoImage(message, imageFile);
         return CommonResponse.of(SuccessStatus.UPLOAD_IMAGE_SUCCESS, null);
     }
 
     @Operation(summary = "이미지 조회")
     @GetMapping(value = "/messages/{message_id}")
     public CommonResponse<ImageResponseDto.GetImagesResponse> getImage(@PathVariable("message_id") Long messageId) {
-        List<MessageImage> messageImages = messageImageService.getImage(messageId);
+
+        Message message = messageServiceImpl.getMessageById(messageId);
+
+        List<MessageImage> messageImages = messageImageService.getImage(message);
         List<ImageResponseDto.ImageResponse> imageResponses = messageImages.stream()
                 .map(this::convertToImageResponse)
                 .collect(Collectors.toList());
