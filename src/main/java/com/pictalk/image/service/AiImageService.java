@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class AiImageService {
 
-    private static final String PROMPT_TEMPLATE = "Create a high-quality, detailed image depicting the following situation: \\\"%s\\\". The image should evoke the atmosphere or feeling of \\\"%s\\\".";
+    private static final String PROMPT_TEMPLATE = "이 프롬프트는 한국어로 작성되었습니다. \"%s\" 상황을 묘사한 이미지로, \"%s\" 분위기를 담아주세요. 이미지 스타일은 사실적이고, 고해상도로 표현해주세요.";
 
     private final OpenAIImageClient openAIImageClient;
 

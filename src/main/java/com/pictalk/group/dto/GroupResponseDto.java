@@ -14,6 +14,12 @@ public class GroupResponseDto {
 
     @Getter
     @Builder
+    public static class CreateGroupResponse {
+        private Long groupId;
+    }
+
+    @Getter
+    @Builder
     public static class GroupDetailResponse {
         private List<GroupReceiverResponse> groupReceivers;
     }
