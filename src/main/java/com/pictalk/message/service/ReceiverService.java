@@ -25,6 +25,12 @@ public class ReceiverService {
     }
 
     public void findOrCreateReceivers(List<Target> targets) {
-
+        for (Target target : targets) {
+            receiverRepository.findByPhoneNumber(target.getTo())
+                    .orElseGet(() -> receiverRepository.save(Receiver.builder()
+                            .phoneNumber(target.getTo())
+                            .nickname(target.getName())
+                            .build()));
+        }
     }
 }
