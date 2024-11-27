@@ -46,6 +46,7 @@ public class GroupService {
         return groupRepository.findAllByUser(user);
     }
 
+    @Transactional
     public void updateGroup(Long groupId, UpdateGroupRequest updateGroupRequest) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.GROUP_NOT_FOUND));
