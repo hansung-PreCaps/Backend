@@ -86,6 +86,7 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
 
         if(image == null) {
             file = null;
+            messageServiceImpl.saveMessage(message);
         }
         else {
             file.add(ImageUtil.convertMultipartFileToFileDto(image));
@@ -100,6 +101,7 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
         String messageKey = (String) messageResponse.getBody().get("messageKey");
 
         message.addMessageKey(messageKey);
+        messageServiceImpl.saveMessage(message);
 //        messageImageService.createFiletoImage(message, image);
 
         return SendMessageResponse
@@ -140,26 +142,11 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
 //                .map(s3Uploader::uploadImage) // uploadImage 메서드 호출
 //                .toList();
 
-
-//        List<ResendFile> files = images.stream()
-//                .map(ImageUtil::convertMultipartFileToResendFile)
-//                .toList();
-//        List<ResendFile> file;
-//
-//        if(multipartFile == null) {
-//            file = null;
-//        }
-//        else {
-//            file = new ArrayList<>();
-//            Image image = s3Uploader.uploadImage(multipartFile);
-//            file.add(ImageUtil.convertMultipartFileToResendFile(image));
-//            messageServiceImpl.saveMessage(message);
-//            messageImageService.createImage(message, image);
-//        }
         List<FileDto> file;
 
         if(image == null) {
             file = null;
+            messageServiceImpl.saveMessage(message);
         }
         else {
             file = new ArrayList<>();
@@ -190,6 +177,7 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
         String messageKey = (String) messageResponse.getBody().get("messageKey");
 
         message.addMessageKey(messageKey);
+        messageServiceImpl.saveMessage(message);
 
         return SendMessageResponse
                 .builder()
