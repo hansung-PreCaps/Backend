@@ -1,7 +1,10 @@
 package com.pictalk.group.dto;
 
 import java.util.List;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class GroupRequestDto {
     @Getter
@@ -10,6 +13,8 @@ public class GroupRequestDto {
     }
 
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class UpdateGroupRequest {
         private String groupName;
     }
