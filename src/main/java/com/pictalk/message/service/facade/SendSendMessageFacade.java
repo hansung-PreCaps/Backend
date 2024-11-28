@@ -21,6 +21,7 @@ import com.pictalk.message.service.MessageServiceImpl;
 import com.pictalk.message.service.ReceiverService;
 import com.pictalk.message.service.SenderService;
 import com.pictalk.user.domain.User;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -66,12 +67,17 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
                 .sender(sender)
                 .content(request.getContent())
                 .status(request.getStatus())
+                .sentAt(request.getSendTime()==null ? LocalDateTime.now() : LocalDateTime.parse(request.getSendTime()))
                 .build();
 
 
-        List<Receiver> receivers = receiverService.findOrCreateReceivers(request.getTargets());
 
-        for (Receiver receiver : receivers) {
+        for (Target target : request.getTargets()) {
+            Receiver receiver = Receiver.builder()
+                    .phoneNumber(target.getTo())
+                    .nickname(target.getName())
+                    .build();
+
             message.addReceiver(receiver);
         }
 
