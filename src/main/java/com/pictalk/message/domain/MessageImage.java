@@ -26,7 +26,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "message_images")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "deleted_at IS NULL")
 public class MessageImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
