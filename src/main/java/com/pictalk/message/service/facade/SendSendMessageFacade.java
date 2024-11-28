@@ -68,17 +68,15 @@ public class SendSendMessageFacade implements SendMessageService<Object, SendMes
                 .status(request.getStatus())
                 .build();
 
-        for (Target target : request.getTargets()) {
-            Receiver receiver = Receiver.builder()
-                    .phoneNumber(target.getTo())
-                    .nickname(target.getName())
-                    .build();
 
+        List<Receiver> receivers = receiverService.findOrCreateReceivers(request.getTargets());
+
+        for (Receiver receiver : receivers) {
             message.addReceiver(receiver);
         }
 
         // 수신자 생성
-        receiverService.findOrCreateReceivers(request.getTargets());
+
 
 //        List<FileDto> files = images.stream()
 //                .map(ImageUtil::convertMultipartFileToFileDto)
