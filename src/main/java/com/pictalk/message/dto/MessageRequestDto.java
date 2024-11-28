@@ -110,4 +110,17 @@ public class MessageRequestDto {
         private String situation;
         private List<String> keyword;
     }
+
+    @Getter
+    public static class TempMessageRequest {
+
+        private String duplicateFlag = "N";
+        private String content;
+        private String from;
+        private String to;
+        private String sendTime;
+        private int targetCount;
+        private List<Target> targets;
+    }
+
 }

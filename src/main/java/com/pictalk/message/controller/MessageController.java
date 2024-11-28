@@ -152,5 +152,12 @@ public class MessageController {
                 .collect(Collectors.joining(", "));
     }
 
-
+        @PostMapping("/temp")
+    public CommonResponse<Void> saveTempMessage(
+            @AuthenticationPrincipal UserDetails authenticatedPrincipal,
+            @Valid @RequestBody MessageRequestDto.TempMessageRequest request) {
+        String userEmail = authenticatedPrincipal.getUsername();
+        messageServiceImpl.saveTempMessage(request, userEmail);
+        return CommonResponse.onSuccess(null);
+    }
 }
