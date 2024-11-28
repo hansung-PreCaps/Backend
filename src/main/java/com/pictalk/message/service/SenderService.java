@@ -17,4 +17,9 @@ public class SenderService {
         return senderRepository.findByPhoneNumberAndUser(from, user)
                 .orElseGet(() -> senderRepository.save(Sender.builder().phoneNumber(from).user(user).build()));
     }
+
+    public Sender findOrCreateByUserAndPhoneNumber(User user, String from) {
+        return senderRepository.findByPhoneNumberAndUser(from, user)
+                .orElseGet(() -> senderRepository.save(Sender.builder().phoneNumber(from).user(user).build()));
+    }
 }

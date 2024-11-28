@@ -6,12 +6,17 @@ import com.pictalk.global.payload.status.ErrorStatus;
 import com.pictalk.infra.PpurioService;
 import com.pictalk.message.domain.Message;
 import com.pictalk.message.domain.MessageStatus;
+import com.pictalk.message.domain.Sender;
+import com.pictalk.message.dto.MessageRequestDto;
+import com.pictalk.message.dto.MessageRequestDto.TempMessageRequest;
+import com.pictalk.message.dto.MessageResponseDto;
 import com.pictalk.message.dto.MessageResponseDto.CancelMessageResponse;
 import com.pictalk.message.repository.MessageRepository;
 import com.pictalk.message.repository.ReceiverRepository;
 import com.pictalk.message.repository.SenderRepository;
 import com.pictalk.user.domain.User;
 import com.pictalk.user.repository.UserRepository;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +34,7 @@ public class MessageServiceImpl {
     private final UserRepository userRepository;
     private final PpurioClient ppurioClient;
     private final PpurioService ppurioService;
+    private final SenderService senderService;
 
 
     @Transactional(readOnly = true)
@@ -99,4 +105,18 @@ public class MessageServiceImpl {
     }
 
 
+    public void saveTempMessage(@Valid MessageRequestDto.TempMessageRequest request, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+
+        Sender sender = senderService.findOrCreateByUserAndPhoneNumber(user, request.getFrom());
+
+        Message message = Message.builder()
+                .sender(sender)
+                .content(request.getContent())
+                .status(MessageStatus.TEMP)
+                .build();
+
+        saveMessage(message);
+    }
 }
