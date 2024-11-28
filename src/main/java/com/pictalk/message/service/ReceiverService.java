@@ -4,6 +4,7 @@ import com.pictalk.group.dto.GroupRequestDto.GroupReceiverDto;
 import com.pictalk.message.domain.Receiver;
 import com.pictalk.message.dto.MessageRequestDto.Target;
 import com.pictalk.message.repository.ReceiverRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,19 @@ public class ReceiverService {
                 .collect(Collectors.toList()));
     }
 
-    public void findOrCreateReceivers(List<Target> targets) {
+    public List<Receiver> findOrCreateReceivers(List<Target> targets) {
+        List<Receiver> receivers = new ArrayList<>();
+
         for (Target target : targets) {
-            receiverRepository.findByPhoneNumber(target.getTo())
+            Receiver receiver =  receiverRepository.findByPhoneNumber(target.getTo())
                     .orElseGet(() -> receiverRepository.save(Receiver.builder()
                             .phoneNumber(target.getTo())
                             .nickname(target.getName())
                             .build()));
+
+            receivers.add(receiver);
         }
+
+        return receivers;
     }
 }
