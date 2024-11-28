@@ -3,6 +3,7 @@ package com.pictalk.message.controller;
 import com.pictalk.global.payload.response.CommonResponse;
 import com.pictalk.message.domain.Message;
 import com.pictalk.message.domain.MessageImage;
+import com.pictalk.message.domain.MessageStatus;
 import com.pictalk.message.domain.Receiver;
 import com.pictalk.message.dto.MessageRequestDto;
 import com.pictalk.message.dto.MessageRequestDto.SendMessageRequest;
@@ -109,7 +110,7 @@ public class MessageController {
 
     @GetMapping
     public CommonResponse<List<MessageResponse>> getMessageByStatus(@AuthenticationPrincipal UserDetails authenticatedPrincipal,
-                                                              @RequestParam String status) {
+                                                              @RequestParam MessageStatus status) {
         String userEmail = authenticatedPrincipal.getUsername();
         List<Message> messages = messageServiceImpl.getMessageByStatus(userEmail, status);
 

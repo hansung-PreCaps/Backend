@@ -97,11 +97,11 @@ public class MessageServiceImpl {
     }
 
 
-    public List<Message> getMessageByStatus(String userEmail, String status) {
+    public List<Message> getMessageByStatus(String userEmail, MessageStatus status) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
-        return messageRepository.findBySenderUserAndStatus(user, MessageStatus.valueOf(status));
+        return messageRepository.findBySenderUserAndStatus(user, status);
     }
 
 
