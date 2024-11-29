@@ -8,6 +8,7 @@ import com.pictalk.image.dto.ImageResponseDto;
 import com.pictalk.image.service.AiImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,8 @@ public class AiImageController {
 
     @Operation(summary = "Create an AI-generated image")
     @PostMapping
-    public CommonResponse<ImageResponseDto.ImageResponse> createAIImage(@Valid @RequestBody ImageRequestDto.CreateAiImageRequest imageRequest) {
+    public CommonResponse<ImageResponseDto.ImageResponse> createAIImage(
+            @Valid @RequestBody ImageRequestDto.CreateAiImageRequest imageRequest) throws IOException {
         ImageResponseDto.ImageResponse imageResponse = aiImageService.createAiImage(imageRequest);
         return CommonResponse.of(SuccessStatus.CREATED, imageResponse);
     }

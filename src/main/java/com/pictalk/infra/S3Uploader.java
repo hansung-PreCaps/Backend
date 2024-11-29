@@ -57,7 +57,7 @@ public class S3Uploader {
         return dirName + "/" + UUID + "_" + name + "." + type;
     }
 
-    private String putS3(File uploadFile, String fileName) {
+    public String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
